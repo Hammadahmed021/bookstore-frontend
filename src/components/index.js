@@ -6,3 +6,4 @@ export { default as NewsCard } from "./NewsCard";
 export { default as BookCard } from "./BookCard";
 export { default as SwiperComponent } from "./SwiperComponent";
 export { default as News } from "./News";
+export { default as Footer } from "./Footer";

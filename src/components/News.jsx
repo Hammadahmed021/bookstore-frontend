@@ -10,7 +10,7 @@ const News = () => {
   }, []);
 
   return (
-    <div className="py-10">
+    <div className="py-10 mb-10">
       <h2 className="text-3xl font-semibold mb-6">News</h2>
 
       <SwiperComponent
