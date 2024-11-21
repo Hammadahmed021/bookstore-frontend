@@ -4,6 +4,7 @@ import { HiMiniBars3BottomLeft, HiOutlineHeart } from "react-icons/hi2";
 import { CiSearch } from "react-icons/ci";
 import { HiOutlineUser, HiShoppingCart } from "react-icons/hi";
 import avatar from "../assets/avatar.png";
+import { useSelector } from "react-redux";
 
 const DropDownNavigation = [
   {
@@ -25,8 +26,10 @@ const DropDownNavigation = [
 ];
 
 const Navbar = () => {
-  let currentUser = true;
+  let currentUser = false;
   const [isDropdown, setIsDropdown] = useState(false);
+  const cartItems = useSelector((state) => state.cart.cartItems);
+  const cartCount = cartItems.reduce((total, item) => total + item.quantity, 0);
 
   const toggleDropdown = () => {
     setIsDropdown((prev) => !prev);
@@ -94,7 +97,7 @@ const Navbar = () => {
             className="bg-primary p-1 rounded-md flex items-center py-2 sm:px-4"
           >
             <HiShoppingCart color="#222" />
-            <sup>0</sup>
+            <sup>{cartCount}</sup>
           </Link>
         </div>
       </nav>
