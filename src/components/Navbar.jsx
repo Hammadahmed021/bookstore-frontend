@@ -28,8 +28,9 @@ const DropDownNavigation = [
 const Navbar = () => {
   let currentUser = false;
   const [isDropdown, setIsDropdown] = useState(false);
+
   const cartItems = useSelector((state) => state.cart.cartItems);
-  const cartCount = cartItems.reduce((total, item) => total + item.quantity, 0);
+  // const cartCount = cartItems.reduce((total, item) => total + item.quantity, 0);
 
   const toggleDropdown = () => {
     setIsDropdown((prev) => !prev);
@@ -97,7 +98,7 @@ const Navbar = () => {
             className="bg-primary p-1 rounded-md flex items-center py-2 sm:px-4"
           >
             <HiShoppingCart color="#222" />
-            <sup>{cartCount}</sup>
+            {cartItems.length > 0 && <sup>{cartItems?.length}</sup>}
           </Link>
         </div>
       </nav>

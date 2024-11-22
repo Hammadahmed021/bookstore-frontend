@@ -7,20 +7,21 @@ import { addToCart } from "../store/features/cart/cartSlice";
 import { useDispatch } from "react-redux";
 
 const BookCard = ({
-  props: { id, title, coverImage, description, price, salePrice },
+  props: { id, title, coverImage, description, price, salePrice, category },
 }) => {
   const dispatch = useDispatch();
 
   const handleAddToCart = () => {
-    dispatch(
-      addToCart({
-        id,
-        title,
-        price: salePrice,
-        coverImage,
-        quantity: 1,
-      })
-    );
+    const product = {
+      id,
+      title,
+      price,
+      salePrice,
+      coverImage,
+      quantity: 1,
+      category,
+    };
+    dispatch(addToCart(product));
   };
   return (
     <div className=" rounded-lg transition-shadow duration-300">

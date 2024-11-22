@@ -1,7 +1,15 @@
 import React, { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
-const Input = ({ id, type = "text", placeholder, register, validation, errors }) => {
+const Input = ({
+  id,
+  type = "text",
+  placeholder,
+  register,
+  validation,
+  errors,
+  defaultValue = "",
+}) => {
   const [showPassword, setShowPassword] = useState(false);
 
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
@@ -17,6 +25,7 @@ const Input = ({ id, type = "text", placeholder, register, validation, errors })
         id={id}
         type={isPassword && showPassword ? "text" : type}
         placeholder={placeholder}
+        defaultValue={defaultValue} // Use the defaultValue prop
         {...register(id, validation)}
       />
       {isPassword && (
