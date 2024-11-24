@@ -7,16 +7,16 @@ import { addToCart } from "../store/features/cart/cartSlice";
 import { useDispatch } from "react-redux";
 
 const BookCard = ({
-  props: { id, title, coverImage, description, price, salePrice, category },
+  props: { _id, title, coverImage, description, oldPrice, newPrice, category },
 }) => {
   const dispatch = useDispatch();
 
   const handleAddToCart = () => {
     const product = {
-      id,
+      _id,
       title,
-      price,
-      salePrice,
+      oldPrice,
+      newPrice,
       coverImage,
       quantity: 1,
       category,
@@ -27,7 +27,7 @@ const BookCard = ({
     <div className=" rounded-lg transition-shadow duration-300">
       <div className="flex flex-col sm:flex-row sm:items-center sm:h-72  sm:justify-center gap-4">
         <div className="sm:h-72 sm:flex-shrink-0 border rounded-md">
-          <Link to={`/book/${id}`}>
+          <Link to={`/book/${_id}`}>
             <img
               src={`${getImgUrl(coverImage)}`}
               alt={title}
@@ -37,7 +37,7 @@ const BookCard = ({
         </div>
 
         <div>
-          <Link to={`/book/${id}`}>
+          <Link to={`/book/${_id}`}>
             <h3 className="text-xl font-semibold hover:text-blue-600 mb-3">
               {title?.length > 25 ? `${title?.slice(0, 25)}...` : title}
             </h3>
@@ -48,8 +48,8 @@ const BookCard = ({
               : description}
           </p>
           <p className="font-medium mb-5">
-            ${salePrice}{" "}
-            <span className="line-through font-normal ml-2">${price}</span>
+            ${newPrice}{" "}
+            <span className="line-through font-normal ml-2">${oldPrice}</span>
           </p>
           {/* <button className="btn-primary px-6 space-x-1 flex items-center gap-1 ">
             <FiShoppingCart className="" />

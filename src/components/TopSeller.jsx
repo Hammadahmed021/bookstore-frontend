@@ -2,14 +2,16 @@ import React, { useEffect, useState } from "react";
 import { booksData } from "../utils/localDB";
 import BookCard from "./BookCard";
 import SwiperComponent from "./SwiperComponent";
+import { useFetchAllBooksQuery } from "../store/features/books/booksApi";
 
 const TopSeller = () => {
-  const [books, setBooks] = useState(null);
+  // const [books, setBooks] = useState(null);
   const [selectCategory, setSelectCategory] = useState("Choose a genre");
-  useEffect(() => {
-    setBooks(booksData);
-  }, []);
-
+  // useEffect(() => {
+  //   setBooks(booksData);
+  // }, []);
+  const { data: books = [] } = useFetchAllBooksQuery()
+  
   const categoryOptions = [
     "Choose a genre",
     "Business",
@@ -17,11 +19,13 @@ const TopSeller = () => {
     "Horror",
     "Adventure",
   ];
-
   const filterBooks =
     selectCategory === "Choose a genre"
       ? books
       : books.filter((item) => item.category === selectCategory.toLowerCase());
+
+      console.log(books, 'books');
+      
 
   return (
     <div className="py-10">

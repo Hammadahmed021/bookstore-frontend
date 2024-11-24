@@ -15,7 +15,7 @@ const Cart = () => {
 
   // Calculate total price based on quantity
   const totalPrice = cartItems
-    ?.reduce((acc, item) => acc + item.salePrice * item.quantity, 0)
+    ?.reduce((acc, item) => acc + item.newPrice * item.quantity, 0)
     .toFixed(2);
 
   const handleClearCart = () => {
@@ -32,7 +32,7 @@ const Cart = () => {
 
     if (updatedQuantity > 0) {
       dispatch(
-        updateCartItemQuantity({ id: product.id, quantity: updatedQuantity })
+        updateCartItemQuantity({ id: product._id, quantity: updatedQuantity })
       );
     }
   };
@@ -62,7 +62,7 @@ const Cart = () => {
             {cartItems?.length > 0 ? (
               <ul role="list" className="-my-6 divide-y divide-gray-200">
                 {cartItems?.map((product) => (
-                  <li className="flex py-6" key={product?.id}>
+                  <li className="flex py-6" key={product?._id}>
                     <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
                       <img
                         alt={product?.title}
@@ -75,13 +75,13 @@ const Cart = () => {
                       <div>
                         <div className="flex flex-wrap justify-between text-base font-medium text-gray-900">
                           <h3>
-                            <Link to={`/product/${product?.id}`}>
+                            <Link to={`/book/${product?._id}`}>
                               {product?.title}
                             </Link>
                           </h3>
                           <p className="sm:ml-4">
                             $
-                            {(product?.salePrice * product?.quantity).toFixed(
+                            {(product?.newPrice * product?.quantity).toFixed(
                               2
                             )}
                           </p>

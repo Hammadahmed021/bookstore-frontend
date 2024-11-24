@@ -1,6 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 import App from "../App";
-import { Cart, Checkout, Home, Login, Register } from "../pages";
+import { BookSingle, Cart, Checkout, Home, Login, Register } from "../pages";
 
 const router = createBrowserRouter([
   {
@@ -31,6 +31,10 @@ const router = createBrowserRouter([
         path: "/checkout",
         element: <Checkout />,
       },
+      {
+        path: "/book/:id",
+        element: <BookSingle />
+      }
     ],
   },
 ]);
