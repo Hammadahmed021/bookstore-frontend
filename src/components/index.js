@@ -8,3 +8,5 @@ export { default as SwiperComponent } from "./SwiperComponent";
 export { default as News } from "./News";
 export { default as Footer } from "./Footer";
 export { default as Input } from "./Input";
+export { default as AuthWall } from "./AuthWall";
+export { default as RestrictedRoute } from "./RestrictedRoute";

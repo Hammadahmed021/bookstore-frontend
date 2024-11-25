@@ -1,9 +1,10 @@
-import React from 'react'
-import { useForm } from 'react-hook-form'
-import { Input } from '../components'
-import { Link } from 'react-router-dom'
-import { FaGoogle } from 'react-icons/fa'
-import Button from '../components/Button'
+import React from "react";
+import { useForm } from "react-hook-form";
+import { Input } from "../components";
+import { Link } from "react-router-dom";
+import { FaGoogle } from "react-icons/fa";
+import Button from "../components/Button";
+import { useRegisterUserMutation } from "../store/features/users/usersApi";
 
 const Register = () => {
   const {
@@ -11,19 +12,49 @@ const Register = () => {
     handleSubmit,
     watch,
     formState: { errors },
-  } = useForm()
+  } = useForm();
 
-  const onSubmit = (data) => console.log(data)
-  const handleGoogleSignIn = () => { }
+  const [registerUser, { isLoading, isError, error: apiError }] =
+    useRegisterUserMutation();
 
+  const onSubmit = async (data) => {
+    try {
+      const response = await registerUser(data).unwrap(); // The unwrap will allow you to catch the response or error
+      console.log(response, "User registered successfully");
+    } catch (error) {
+      console.error("Registration failed", error);
+    }
+  };
+  const handleGoogleSignIn = () => {};
 
   return (
-    <div className='h-[calc(100vh-120px)] flex items-center justify-center'>
+    <div className="h-[calc(100vh-120px)] flex items-center justify-center">
       <div className="w-full max-w-sm mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-        <h2 className='text-xl font-semibold mb-4'>Please Register</h2>
+        <h2 className="text-xl font-semibold mb-4">Please Register</h2>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="username">
+            <label
+              className="block text-gray-700 text-sm font-bold mb-2"
+              htmlFor="name"
+            >
+              Name
+            </label>
+            <Input
+              id="name"
+              type="name"
+              placeholder="Enter your name"
+              register={register}
+              validation={{
+                required: "name is required",
+              }}
+              errors={errors}
+            />
+          </div>
+          <div className="mb-4">
+            <label
+              className="block text-gray-700 text-sm font-bold mb-2"
+              htmlFor="email"
+            >
               Email
             </label>
             <Input
@@ -42,7 +73,10 @@ const Register = () => {
             />
           </div>
           <div className="mb-6">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
+            <label
+              className="block text-gray-700 text-sm font-bold mb-2"
+              htmlFor="password"
+            >
               Password
             </label>
             <Input
@@ -64,12 +98,15 @@ const Register = () => {
           {/* <p className="text-red-500 text-xs italic mb-3">Message</p> */}
 
           <div className="flex flex-wrap space-y-2.5 items-center justify-between">
-            <Button text={'Login'} />
+            <Button text={"Register"} />
           </div>
         </form>
         <p className="inline-block align-baseline font-medium mt-4 text-sm">
           Already have an account? Please
-          <Link to="/login" className='text-blue-500 hover:text-blue-800'> Login</Link>
+          <Link to="/login" className="text-blue-500 hover:text-blue-800">
+            {" "}
+            Login
+          </Link>
         </p>
         <div className="mt-4">
           <button
@@ -80,10 +117,9 @@ const Register = () => {
             Sign in with Google
           </button>
         </div>
-
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Register
+export default Register;

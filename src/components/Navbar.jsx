@@ -5,6 +5,7 @@ import { CiSearch } from "react-icons/ci";
 import { HiOutlineUser, HiShoppingCart } from "react-icons/hi";
 import avatar from "../assets/avatar.png";
 import { useSelector } from "react-redux";
+import { useVerifyUserQuery} from "../store/features/users/usersApi"
 
 const DropDownNavigation = [
   {
@@ -26,7 +27,12 @@ const DropDownNavigation = [
 ];
 
 const Navbar = () => {
-  let currentUser = false;
+  const { data, error, isLoading } = useVerifyUserQuery();
+  console.log(data, 'data>>>>>>>>');
+
+  const currentUser = data?.user
+  
+  // let currentUser = false;
   const [isDropdown, setIsDropdown] = useState(false);
 
   const cartItems = useSelector((state) => state.cart.cartItems);
@@ -58,12 +64,13 @@ const Navbar = () => {
         <div className="relative flex items-center gap-3 ">
           {currentUser ? (
             <>
-              <button onClick={toggleDropdown}>
+              <button onClick={toggleDropdown} className="flex gap-2">
                 <img
                   src={avatar}
                   alt=""
                   className="size-7 rounded-full ring-2 ring-secondary"
                 />
+                <p>{currentUser?.name}</p>
               </button>
               {isDropdown && (
                 <>

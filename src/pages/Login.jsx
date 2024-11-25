@@ -3,9 +3,13 @@ import { useForm } from 'react-hook-form'
 import { FaGoogle } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
 import { Input } from '../components'
+import { useDispatch } from "react-redux";
+import { useLoginUserMutation } from '../store/features/users/usersApi'
 import Button from '../components/Button'
+import { setAuth } from '../store/features/users/userSlice'
 
 const Login = () => {
+  const dispatch = useDispatch()
   const {
     register,
     handleSubmit,
@@ -13,7 +17,21 @@ const Login = () => {
     formState: { errors },
   } = useForm()
 
-  const onSubmit = (data) => console.log(data)
+  
+  const [loginUser, { isLoading, error }] = useLoginUserMutation();
+
+  const onSubmit = async (data) => {
+    try {
+      const response = await loginUser(data).unwrap(); // The unwrap will allow you to catch the response or error
+      if(response){
+        dispatch(setAuth({ user: response.user, token: response.token }));
+        
+      }
+      console.log(response, "User login successfully");
+    } catch (error) {
+      console.error("Registration failed", error);
+    }
+  };
   const handleGoogleSignIn = () => { }
 
 
@@ -23,7 +41,7 @@ const Login = () => {
         <h2 className='text-xl font-semibold mb-4'>Please Login</h2>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="username">
+            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
               Email
             </label>
             <Input

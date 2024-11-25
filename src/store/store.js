@@ -3,11 +3,12 @@ import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage"; // Use localStorage as storage
 import rootReducer from "./rootReducer";
 import booksApi from "./features/books/booksApi";
+import authApi from "./features/users/usersApi";
 
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["cart"], // Only persist the cart slice
+  whitelist: ["cart", "auth"], // Only persist the cart slice
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
@@ -17,7 +18,7 @@ export const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: false, // Disable serializable check for redux-persist compatibility
-    }).concat(booksApi.middleware), // Add API middleware
+    }).concat(booksApi.middleware, authApi.middleware), // Add API middleware
 });
 
 

@@ -1,6 +1,8 @@
 import { createBrowserRouter } from "react-router-dom";
 import App from "../App";
 import { BookSingle, Cart, Checkout, Home, Login, Register } from "../pages";
+import { AuthWall, RestrictedRoute } from "../components";
+
 
 const router = createBrowserRouter([
   {
@@ -12,29 +14,57 @@ const router = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: "/order",
-        element: <h2>Order</h2>,
-      },
-      {
         path: "/login",
-        element: <Login />,
+        element: (
+          <RestrictedRoute>
+            <Login />
+          </RestrictedRoute>
+        ),
       },
       {
         path: "/register",
-        element: <Register />,
+        element: (
+          <RestrictedRoute>
+            <Register />
+          </RestrictedRoute>
+        ),
       },
       {
         path: "/cart",
-        element: <Cart />,
+        element: (
+          <AuthWall>
+            <Cart />
+          </AuthWall>
+        ),
       },
       {
         path: "/checkout",
-        element: <Checkout />,
+        element: (
+          <AuthWall>
+            <Checkout />
+          </AuthWall>
+        ),
       },
       {
         path: "/book/:id",
-        element: <BookSingle />
-      }
+        element: <BookSingle />,
+      },
+      {
+        path: "/order",
+        element: (
+          <AuthWall>
+            <h2>Order</h2>
+          </AuthWall>
+        ),
+      },
+      {
+        path: "/dashboard",
+        element: (
+          <AuthWall>
+            <h2>Dashboard</h2>
+          </AuthWall>
+        ),
+      },
     ],
   },
 ]);
