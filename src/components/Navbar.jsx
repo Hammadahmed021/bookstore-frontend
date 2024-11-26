@@ -1,11 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { HiMiniBars3BottomLeft, HiOutlineHeart } from "react-icons/hi2";
 import { CiSearch } from "react-icons/ci";
 import { HiOutlineUser, HiShoppingCart } from "react-icons/hi";
 import avatar from "../assets/avatar.png";
-import { useSelector } from "react-redux";
-import { useVerifyUserQuery} from "../store/features/users/usersApi"
+import { useDispatch, useSelector } from "react-redux";
+import {
+  useLogoutUserMutation,
+  useVerifyUserQuery,
+} from "../store/features/users/usersApi";
+import { clearAuth, setAuth } from "../store/features/users/userSlice";
 
 const DropDownNavigation = [
   {
@@ -27,20 +31,42 @@ const DropDownNavigation = [
 ];
 
 const Navbar = () => {
+  const [logoutUser] = useLogoutUserMutation();
   const { data, error, isLoading } = useVerifyUserQuery();
-  console.log(data, 'data>>>>>>>>');
 
-  const currentUser = data?.user
-  
+  const dispatch = useDispatch();
   // let currentUser = false;
   const [isDropdown, setIsDropdown] = useState(false);
+  // State to manage the current user
+  const [currentUser, setCurrentUser] = useState(null);
 
   const cartItems = useSelector((state) => state.cart.cartItems);
+  const checkUser = useSelector((state) => state.auth.user);
+  console.log(checkUser, "checkUser");
+
   // const cartCount = cartItems.reduce((total, item) => total + item.quantity, 0);
 
   const toggleDropdown = () => {
     setIsDropdown((prev) => !prev);
   };
+
+  const handleLogout = async () => {
+    try {
+      const response = await logoutUser().unwrap();
+      console.log(response.message);
+      dispatch(clearAuth()); // Clear Redux auth state
+      setCurrentUser(null); // Clear local state
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
+  useEffect(() => {
+    if (data?.user) {
+      setCurrentUser(data.user);
+    } else {
+      setCurrentUser(null);
+    }
+  }, [data?.user]);
 
   return (
     <header className="max-w-screen-2xl mx-auto px-4 py-6">
@@ -62,7 +88,7 @@ const Navbar = () => {
           </div>
         </div>
         <div className="relative flex items-center gap-3 ">
-          {currentUser ? (
+          {currentUser || checkUser ? (
             <>
               <button onClick={toggleDropdown} className="flex gap-2">
                 <img
@@ -70,7 +96,7 @@ const Navbar = () => {
                   alt=""
                   className="size-7 rounded-full ring-2 ring-secondary"
                 />
-                <p>{currentUser?.name}</p>
+                <p>{currentUser?.name || checkUser?.name}</p>
               </button>
               {isDropdown && (
                 <>
@@ -86,6 +112,9 @@ const Navbar = () => {
                           </Link>
                         </li>
                       ))}
+                      <li>
+                        <span onClick={handleLogout}>Logout</span>
+                      </li>
                     </ul>
                   </div>
                 </>

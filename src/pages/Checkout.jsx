@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { Input } from "../components";
+import { useCreateOrderMutation } from "../store/features/orders/orderApi";
+import { showSuccessToast } from "../utils/toast";
 
 const Checkout = () => {
   const {
@@ -16,20 +18,20 @@ const Checkout = () => {
   const total = location.state?.totalPrice;
   const cartItems = useSelector((state) => state.cart.cartItems);
 
-  //   const totalPrice = cartItems
-  //     ?.reduce((acc, item) => acc + item.salePrice, 0)
-  //     .toFixed(2);
+  const checkUser = useSelector((state) => state.auth.user);
+  console.log(checkUser, "checkUser");
 
-  const currentUser = {
-    email: "abc@yopmail.com",
-  };
+  useEffect(() => {}, [checkUser]);
 
-  const onSubmit = (data) => {
+
+  const [createOrder, { isLoading, isError, isSuccess, error }] = useCreateOrderMutation();
+
+  const onSubmit = async (data) => {
     console.log(data, "data");
 
     const orderDetails = {
       name: data?.name,
-      email: data?.email || currentUser?.email,
+      email: data?.email || checkUser?.email,
       phone: data?.phone,
       address: {
         address: data?.address,
@@ -38,10 +40,27 @@ const Checkout = () => {
         state: data?.state,
         zipcode: data?.zipcode,
       },
-      product_titles: cartItems.map((item) => item.title),
+      products: cartItems.map((item) => ({
+        title: item.title,
+        price: item.newPrice, // Ensure 'newPrice' exists in your cart items
+        quantity: item.quantity,
+      })),
       totalPrice: total,
     };
+
     console.log(orderDetails, "orderDetails");
+
+    try {
+      const response = await createOrder(orderDetails).unwrap();
+      if(response){
+        showSuccessToast("Order created successfully")
+      }
+      console.log("Order created successfully:", response);
+      // Add any additional logic, e.g., redirecting to a success page
+    } catch (err) {
+      console.error("Failed to create order:", err);
+      // Handle the error
+    }
   };
 
   return (
@@ -85,7 +104,7 @@ const Checkout = () => {
                       id="email"
                       type="email"
                       placeholder="email"
-                      defaultValue={currentUser?.email}
+                      defaultValue={(checkUser && checkUser?.email) || ""}
                       register={register}
                       errors={errors}
                     />

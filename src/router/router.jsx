@@ -1,8 +1,15 @@
 import { createBrowserRouter } from "react-router-dom";
 import App from "../App";
-import { BookSingle, Cart, Checkout, Home, Login, Register } from "../pages";
+import {
+  BookSingle,
+  Cart,
+  Checkout,
+  Home,
+  Login,
+  Order,
+  Register,
+} from "../pages";
 import { AuthWall, RestrictedRoute } from "../components";
-
 
 const router = createBrowserRouter([
   {
@@ -16,34 +23,26 @@ const router = createBrowserRouter([
       {
         path: "/login",
         element: (
-          <RestrictedRoute>
+          <AuthWall authentication={false}>
             <Login />
-          </RestrictedRoute>
+          </AuthWall>
         ),
       },
       {
         path: "/register",
         element: (
-          <RestrictedRoute>
+          <AuthWall authentication={false}>
             <Register />
-          </RestrictedRoute>
+          </AuthWall>
         ),
       },
       {
         path: "/cart",
-        element: (
-          <AuthWall>
-            <Cart />
-          </AuthWall>
-        ),
+        element: <Cart />,
       },
       {
         path: "/checkout",
-        element: (
-          <AuthWall>
-            <Checkout />
-          </AuthWall>
-        ),
+        element: <Checkout />,
       },
       {
         path: "/book/:id",
@@ -52,15 +51,15 @@ const router = createBrowserRouter([
       {
         path: "/order",
         element: (
-          <AuthWall>
-            <h2>Order</h2>
+          <AuthWall authentication={true}>
+            <Order />
           </AuthWall>
         ),
       },
       {
         path: "/dashboard",
         element: (
-          <AuthWall>
+          <AuthWall authentication={true}>
             <h2>Dashboard</h2>
           </AuthWall>
         ),

@@ -1,13 +1,7 @@
 import { Outlet } from "react-router-dom";
 import { Footer, Navbar } from "./components";
-import { useEffect } from "react";
-// import "react-toastify/dist/ReactToastify.css";
-
-
-
 
 export default function App() {
-  
   return (
     <>
       <Navbar />
@@ -16,5 +10,5 @@ export default function App() {
       </main>
       <Footer />
     </>
-  )
+  );
 }

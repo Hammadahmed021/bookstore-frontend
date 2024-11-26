@@ -1,47 +1,48 @@
-import React from 'react'
-import { useForm } from 'react-hook-form'
-import { FaGoogle } from 'react-icons/fa'
-import { Link } from 'react-router-dom'
-import { Input } from '../components'
+import React from "react";
+import { useForm } from "react-hook-form";
+import { FaGoogle } from "react-icons/fa";
+import { Link, useNavigate } from "react-router-dom";
+import { Input } from "../components";
 import { useDispatch } from "react-redux";
-import { useLoginUserMutation } from '../store/features/users/usersApi'
-import Button from '../components/Button'
-import { setAuth } from '../store/features/users/userSlice'
+import { useLoginUserMutation } from "../store/features/users/usersApi";
+import Button from "../components/Button";
+import { setAuth } from "../store/features/users/userSlice";
 
 const Login = () => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors },
-  } = useForm()
+  } = useForm();
 
-  
   const [loginUser, { isLoading, error }] = useLoginUserMutation();
 
   const onSubmit = async (data) => {
     try {
       const response = await loginUser(data).unwrap(); // The unwrap will allow you to catch the response or error
-      if(response){
-        dispatch(setAuth({ user: response.user, token: response.token }));
-        
+      if (response) {
+        dispatch(setAuth({ user: response, token: response.token }));
       }
       console.log(response, "User login successfully");
     } catch (error) {
       console.error("Registration failed", error);
     }
   };
-  const handleGoogleSignIn = () => { }
-
+  const handleGoogleSignIn = () => {};
 
   return (
-    <div className='h-[calc(100vh-120px)] flex items-center justify-center'>
+    <div className="h-[calc(100vh-120px)] flex items-center justify-center">
       <div className="w-full max-w-sm mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-        <h2 className='text-xl font-semibold mb-4'>Please Login</h2>
+        <h2 className="text-xl font-semibold mb-4">Please Login</h2>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
+            <label
+              className="block text-gray-700 text-sm font-bold mb-2"
+              htmlFor="email"
+            >
               Email
             </label>
             <Input
@@ -60,7 +61,10 @@ const Login = () => {
             />
           </div>
           <div className="mb-6">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
+            <label
+              className="block text-gray-700 text-sm font-bold mb-2"
+              htmlFor="password"
+            >
               Password
             </label>
             <Input
@@ -82,12 +86,15 @@ const Login = () => {
           {/* <p className="text-red-500 text-xs italic mb-3">Message</p> */}
 
           <div className="flex flex-wrap space-y-2.5 items-center justify-between">
-            <Button text={'Login'} />
+            <Button text={"Login"} />
           </div>
         </form>
         <p className="inline-block align-baseline font-medium mt-4 text-sm">
           Haven't an account? Please
-          <Link to="/register" className='text-blue-500 hover:text-blue-800'> Register</Link>
+          <Link to="/register" className="text-blue-500 hover:text-blue-800">
+            {" "}
+            Register
+          </Link>
         </p>
         <div className="mt-4">
           <button
@@ -98,10 +105,9 @@ const Login = () => {
             Sign in with Google
           </button>
         </div>
-
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Login
+export default Login;

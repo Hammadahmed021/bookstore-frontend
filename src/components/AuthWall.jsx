@@ -1,20 +1,25 @@
-import { useVerifyUserQuery } from "../store/features/users/usersApi";
-import { Navigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
-const AuthWall = ({ children }) => {
-  const { data, error, isLoading } = useVerifyUserQuery();
+const AuthWall = ({ children, authentication = true }) => {
+  const navigate = useNavigate();
+  const [loader, setLoader] = useState(true);
+  const authStatus = useSelector((state) => state.auth.isAuthenticated);
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
+  useEffect(() => {
+    if (authentication && !authStatus) {
+      // If authentication is required and user is not logged in, redirect to login
+      navigate("/login");
+    } else if (!authentication && authStatus) {
+      // If authentication is not required and user is logged in, redirect to home
+      navigate("/dashboard");
+    }
 
-  if (error || !data?.success) {
-    // Redirect to login if the user is not authenticated
-    return <Navigate to="/login" replace />;
-  }
+    setLoader(false);
+  }, [authentication, authStatus, navigate]);
 
-  // If the user is authenticated, render the children components
-  return <>{children}</>;
+  return loader ? <h2>loading...</h2> : <>{children}</>;
 };
 
 export default AuthWall;

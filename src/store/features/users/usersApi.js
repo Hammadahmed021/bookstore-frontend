@@ -96,6 +96,30 @@ const authApi = createApi({
     verifyUser: builder.query({
       query: () => "/verify", // Endpoint to verify user status based on the stored token
     }),
+    
+    // Logout user mutation
+    logoutUser: builder.mutation({
+      async queryFn(_arg, _queryApi, _extraOptions, baseQueryFn) {
+        try {
+          // Call the backend API to log the user out
+          const result = await baseQueryFn({
+            url: "/logout",
+            method: "POST",
+          });
+    
+          if (result.error) throw result.error;
+    
+          // Clear the token from cookies
+          Cookies.remove("token");
+    
+          // Return success response
+          return { data: { success: true, message: "Logged out successfully" } };
+        } catch (error) {
+          return { error: { status: "CUSTOM_ERROR", error: error.message } };
+        }
+      },
+    }),
+    
   }),
 });
 
@@ -103,6 +127,7 @@ export const {
   useRegisterUserMutation,
   useLoginUserMutation,
   useVerifyUserQuery,
+  useLogoutUserMutation
 } = authApi;
 
 export default authApi;
