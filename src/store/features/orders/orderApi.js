@@ -43,6 +43,16 @@ const ordersApi = createApi({
       invalidatesTags: ["Orders"], // Invalidate the cache for orders after creation
     }),
 
+    // Create a new guest order
+    createGuestOrder: builder.mutation({
+      query: (newOrder) => ({
+        url: "/guest-order", // Endpoint to create a new order
+        method: "POST",
+        body: newOrder, // Send the new order in the request body
+      }),
+      invalidatesTags: ["Orders"], // Invalidate the cache for orders after creation
+    }),
+
     // Delete an order
     deleteOrder: builder.mutation({
       query: (id) => ({
@@ -51,14 +61,22 @@ const ordersApi = createApi({
       }),
       invalidatesTags: ["Orders"], // Invalidate the cache for orders after deletion
     }),
+
+     // Fetch orders by user ID
+     fetchOrdersByUserId: builder.query({
+      query: (userId) => `/user/${userId}`, // Endpoint to get orders by user ID
+      providesTags: (result, error, userId) => [{ type: "Orders", userId }],
+    }),
   }),
 });
 
 export const {
   useFetchAllOrdersQuery,
   useCreateOrderMutation,
+  useCreateGuestOrderMutation,
   useFetchOrderByIdQuery,
-//   useDeleteOrderMutation,
+  useFetchOrdersByUserIdQuery, // New hook for fetching orders by user ID
+  //   useDeleteOrderMutation,
 } = ordersApi;
 
 export default ordersApi;

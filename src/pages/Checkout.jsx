@@ -1,10 +1,15 @@
 import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { Input } from "../components";
-import { useCreateOrderMutation } from "../store/features/orders/orderApi";
+import {
+  useCreateGuestOrderMutation,
+  useCreateOrderMutation,
+} from "../store/features/orders/orderApi";
 import { showSuccessToast } from "../utils/toast";
+import { useVerifyUserQuery } from "../store/features/users/usersApi";
+import { emptyCart } from "../store/features/cart/cartSlice";
 
 const Checkout = () => {
   const {
@@ -15,7 +20,8 @@ const Checkout = () => {
   } = useForm();
 
   const location = useLocation();
-  const navigate = useNavigate()
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const total = location.state?.totalPrice;
   const cartItems = useSelector((state) => state.cart.cartItems);
 
@@ -24,13 +30,36 @@ const Checkout = () => {
 
   useEffect(() => {}, [checkUser]);
 
-
-  const [createOrder, { isLoading, isError, isSuccess, error }] = useCreateOrderMutation();
+  const [createOrder, { isLoading, isError, isSuccess, error }] =
+    useCreateOrderMutation();
+  const [createGuestOrder] = useCreateGuestOrderMutation();
+  const { data: verifyUser } = useVerifyUserQuery();
+  const userId = verifyUser?.user?.id;
 
   const onSubmit = async (data) => {
     console.log(data, "data");
 
     const orderDetails = {
+      userId: userId,
+      name: data?.name,
+      email: data?.email || checkUser?.email,
+      phone: data?.phone,
+      address: {
+        address: data?.address,
+        city: data?.city,
+        country: data?.country,
+        state: data?.state,
+        zipcode: data?.zipcode,
+      },
+      products: cartItems.map((item) => ({
+        title: item.title,
+        price: item.newPrice, // Ensure 'newPrice' exists in your cart items
+        quantity: item.quantity,
+      })),
+      totalPrice: total,
+    };
+
+    const orderDetailsGuest = {
       name: data?.name,
       email: data?.email || checkUser?.email,
       phone: data?.phone,
@@ -50,17 +79,27 @@ const Checkout = () => {
     };
 
     console.log(orderDetails, "orderDetails");
+    console.log(orderDetailsGuest, "orderDetailsGuest");
 
     try {
-      const response = await createOrder(orderDetails).unwrap();
-      if(response){
-        showSuccessToast("Order created successfully")
-        setTimeout(() => {
-          navigate('/order')
-        }, 1000);
-
+      if (checkUser) {
+        const response = await createOrder(orderDetails).unwrap();
+        if (response) {
+          showSuccessToast("Order created successfully");
+          setTimeout(() => {
+            navigate("/order");
+          }, 1000);
+        }
+      } else {
+        const response = await createGuestOrder(orderDetailsGuest).unwrap();
+        if (response) {
+          showSuccessToast("Order created successfully");
+          setTimeout(() => {
+            navigate("/");
+          }, 1000);
+        }
       }
-      console.log("Order created successfully:", response);
+      dispatch(emptyCart());
       // Add any additional logic, e.g., redirecting to a success page
     } catch (err) {
       console.error("Failed to create order:", err);
