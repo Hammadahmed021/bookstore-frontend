@@ -13,8 +13,6 @@ const Recommended = () => {
       setBooks(filterBooks)
     }
   }, [data]);
-  console.log(books, 'books');
-
 
   return (
     <div className="py-10">

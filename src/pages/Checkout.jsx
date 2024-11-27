@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { Input } from "../components";
 import { useCreateOrderMutation } from "../store/features/orders/orderApi";
@@ -15,6 +15,7 @@ const Checkout = () => {
   } = useForm();
 
   const location = useLocation();
+  const navigate = useNavigate()
   const total = location.state?.totalPrice;
   const cartItems = useSelector((state) => state.cart.cartItems);
 
@@ -54,6 +55,10 @@ const Checkout = () => {
       const response = await createOrder(orderDetails).unwrap();
       if(response){
         showSuccessToast("Order created successfully")
+        setTimeout(() => {
+          navigate('/order')
+        }, 1000);
+
       }
       console.log("Order created successfully:", response);
       // Add any additional logic, e.g., redirecting to a success page
@@ -75,7 +80,7 @@ const Checkout = () => {
             <p className="text-gray-500 mb-6">Items:{cartItems?.length}</p>
           </div>
 
-          <div className="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6">
+          <div className="bg-white rounded-lg border p-4 px-4 md:p-8 mb-6">
             <form
               onSubmit={handleSubmit(onSubmit)}
               className="grid gap-4 gap-y-2 text-sm grid-cols-1 lg:grid-cols-3 my-8"

@@ -7,6 +7,7 @@ import {
   Home,
   Login,
   Order,
+  OrderSingle,
   Register,
 } from "../pages";
 import { AuthWall, RestrictedRoute } from "../components";
@@ -53,6 +54,14 @@ const router = createBrowserRouter([
         element: (
           <AuthWall authentication={true}>
             <Order />
+          </AuthWall>
+        ),
+      },
+      {
+        path: "/order/:id",
+        element: (
+          <AuthWall authentication={true}>
+            <OrderSingle />
           </AuthWall>
         ),
       },

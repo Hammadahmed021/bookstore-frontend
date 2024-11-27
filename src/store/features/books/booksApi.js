@@ -26,7 +26,7 @@ const booksApi = createApi({
       query: () => `/get-all`,
       providesTags: ["Books"],
     }),
-    fetchBookById: builder.query({
+    fetchBookById: builder.query({ 
       query: (id) => `/${id}`,
       providesTags: (result, error, id) => [{ type: "Books", id }],
     }),

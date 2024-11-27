@@ -10,8 +10,8 @@ const TopSeller = () => {
   // useEffect(() => {
   //   setBooks(booksData);
   // }, []);
-  const { data: books = [] } = useFetchAllBooksQuery()
-  
+  const { data: books = [] } = useFetchAllBooksQuery();
+
   const categoryOptions = [
     "Choose a genre",
     "Business",
@@ -23,9 +23,6 @@ const TopSeller = () => {
     selectCategory === "Choose a genre"
       ? books
       : books.filter((item) => item.category === selectCategory.toLowerCase());
-
-      console.log(books, 'books');
-      
 
   return (
     <div className="py-10">

@@ -42,7 +42,6 @@ const Navbar = () => {
 
   const cartItems = useSelector((state) => state.cart.cartItems);
   const checkUser = useSelector((state) => state.auth.user);
-  console.log(checkUser, "checkUser");
 
   // const cartCount = cartItems.reduce((total, item) => total + item.quantity, 0);
 
@@ -69,7 +68,7 @@ const Navbar = () => {
   }, [data?.user]);
 
   return (
-    <header className="max-w-screen-2xl mx-auto px-4 py-6">
+    <header className="max-w-screen-2xl mx-auto px-4 py-6 font-primary">
       <nav className="flex justify-between items-center">
         {/* left side */}
         <div className="flex items-center md:gap-16 gap-4">
@@ -87,7 +86,7 @@ const Navbar = () => {
             />
           </div>
         </div>
-        <div className="relative flex items-center gap-3 ">
+        <div className="relative flex items-center gap-3">
           {currentUser || checkUser ? (
             <>
               <button onClick={toggleDropdown} className="flex gap-2">
@@ -100,7 +99,7 @@ const Navbar = () => {
               </button>
               {isDropdown && (
                 <>
-                  <div className="absolute right-0 mt-2 top-8 w-full rounded-md shadow-lg bg-white z-10">
+                  <div className="absolute right-0 mt-2 top-8 p-1 border w-full rounded-lg shadow-lg bg-white z-10">
                     <ul className="text-xs sm:text-sm">
                       {DropDownNavigation.map((item) => (
                         <li key={item.name}>
@@ -113,7 +112,12 @@ const Navbar = () => {
                         </li>
                       ))}
                       <li>
-                        <span onClick={handleLogout}>Logout</span>
+                        <span
+                          className="block cursor-pointer duration-200 hover:bg-gray-100 p-1"
+                          onClick={handleLogout}
+                        >
+                          Logout
+                        </span>
                       </li>
                     </ul>
                   </div>
