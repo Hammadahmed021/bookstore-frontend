@@ -2,13 +2,13 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { FaGoogle } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
-import { Input } from "../components";
+import { Input } from "../../components";
 import { useDispatch } from "react-redux";
-import { useLoginUserMutation } from "../store/features/users/usersApi";
-import Button from "../components/Button";
-import { setAuth } from "../store/features/users/userSlice";
+import { useAdminLoginMutation } from "../../store/features/users/usersApi";
+import Button from "../../components/Button";
+import { setAuth } from "../../store/features/users/userSlice";
 
-const Login = () => {
+const AdminLogin = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const {
@@ -18,36 +18,26 @@ const Login = () => {
     formState: { errors },
   } = useForm();
 
-  const [loginUser, { isLoading, error }] = useLoginUserMutation();
+  const [loginAdmin, { isLoading, error }] = useAdminLoginMutation();
 
   const onSubmit = async (data) => {
     try {
-      const response = await loginUser(data).unwrap(); // Unwrap to get the response or error
-      console.log(response, "Response from login"); // Check the structure of the response
-    
-      // Ensure that the response has the 'name' property
-      const isAdmin = response.name === "admin"; // Strictly check for admin
-      const userRole = isAdmin ? "admin" : "user"; // Assign the correct role
-    
-      console.log(userRole, 'userRole>>>'); // Debugging the userRole
-    
+      const response = await loginAdmin(data).unwrap(); // The unwrap will allow you to catch the response or error
       if (response) {
-        // Dispatch the role along with the user data and token
-        dispatch(setAuth({ user: response, token: response.token, role: userRole }));
+        dispatch(setAuth({ user: response, token: response.token }));
+        navigate('/admin/orders')
       }
-    
       console.log(response, "User login successfully");
     } catch (error) {
-      console.error("Login failed", error); // Handle login error properly
+      console.error("Registration failed", error);
     }
-   
   };
   const handleGoogleSignIn = () => {};
 
   return (
     <div className="h-[calc(100vh-120px)] flex items-center justify-center">
       <div className="w-full max-w-sm mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-        <h2 className="text-xl font-semibold mb-4">Please Login</h2>
+        <h2 className="text-xl font-semibold mb-4">Login as admin</h2>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="mb-4">
             <label
@@ -100,25 +90,10 @@ const Login = () => {
             <Button text={"Login"} />
           </div>
         </form>
-        <p className="inline-block align-baseline font-medium mt-4 text-sm">
-          Haven't an account? Please
-          <Link to="/register" className="text-blue-500 hover:text-blue-800">
-            {" "}
-            Register
-          </Link>
-        </p>
-        <div className="mt-4">
-          <button
-            className="w-full flex flex-wrap gap-1 items-center justify-center bg-secondary hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-            onClick={handleGoogleSignIn}
-          >
-            <FaGoogle className="mr-2" />
-            Sign in with Google
-          </button>
-        </div>
+      
       </div>
     </div>
   );
 };
 
-export default Login;
+export default AdminLogin;

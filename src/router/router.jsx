@@ -11,6 +11,9 @@ import {
   Register,
 } from "../pages";
 import { AuthWall, RestrictedRoute } from "../components";
+import Dashboard from "../pages/Admin/Dashboard";
+import AdminLogin from "../pages/Admin/AdminLogin";
+import AdminOrders from "../pages/Admin/AdminOrders";
 
 const router = createBrowserRouter([
   {
@@ -70,6 +73,36 @@ const router = createBrowserRouter([
         element: (
           <AuthWall authentication={true}>
             <h2>Dashboard</h2>
+          </AuthWall>
+        ),
+      },
+      // Admin routes grouped under /admin
+      {
+        path: "/admin",
+        element: (
+          <AuthWall authentication={true} requiredRole="admin">
+            <Dashboard />
+          </AuthWall>
+        ),
+        children: [
+          {
+            path: "orders", // Child route
+            element: (
+              <AuthWall authentication={true} requiredRole="admin">
+                <AdminOrders />
+              </AuthWall>
+            ),
+          },
+          // Add more admin child routes here
+        ],
+      },      
+
+      // Admin login route (only accessible to non-authenticated users)
+      {
+        path: "/admin/login",
+        element: (
+          <AuthWall authentication={false}>
+            <AdminLogin />
           </AuthWall>
         ),
       },
