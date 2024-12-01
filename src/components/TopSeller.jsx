@@ -11,6 +11,8 @@ const TopSeller = () => {
   //   setBooks(booksData);
   // }, []);
   const { data: books = [] } = useFetchAllBooksQuery();
+  console.log(books, 'books');
+  
 
   const categoryOptions = [
     "Choose a genre",

@@ -25,6 +25,13 @@ const authApi = createApi({
   baseQuery,
   tagTypes: ["Auth"],
   endpoints: (builder) => ({
+
+    // Get all users
+    fetchAllUsers: builder.query({
+      query: () => `/all`, // Endpoint to get all orders
+      providesTags: ["Auth"],
+    }),
+
     // Register User Mutation
     registerUser: builder.mutation({
       async queryFn(newUser, _queryApi, _extraOptions, baseQueryFn) {
@@ -168,6 +175,7 @@ export const {
   useAdminLoginMutation,
   useVerifyUserQuery,
   useLogoutUserMutation,
+  useFetchAllUsersQuery
 } = authApi;
 
 export default authApi;

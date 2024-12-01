@@ -10,3 +10,4 @@ export { default as Footer } from "./Footer";
 export { default as Input } from "./Input";
 export { default as AuthWall } from "./AuthWall";
 export { default as RestrictedRoute } from "./RestrictedRoute";
+export { default as Sidebar } from "./Admin/Sidebar";

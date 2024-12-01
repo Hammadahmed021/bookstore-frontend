@@ -1,19 +1,24 @@
 import { createBrowserRouter } from "react-router-dom";
 import App from "../App";
 import {
+  AdminBooks,
+  AdminLogin,
+  AdminMain,
+  AdminOrders,
+  AdminUser,
   BookSingle,
   Cart,
   Checkout,
+  Dashboard,
   Home,
   Login,
   Order,
   OrderSingle,
   Register,
+  BookPost
 } from "../pages";
 import { AuthWall, RestrictedRoute } from "../components";
-import Dashboard from "../pages/Admin/Dashboard";
-import AdminLogin from "../pages/Admin/AdminLogin";
-import AdminOrders from "../pages/Admin/AdminOrders";
+
 
 const router = createBrowserRouter([
   {
@@ -81,7 +86,7 @@ const router = createBrowserRouter([
         path: "/admin",
         element: (
           <AuthWall authentication={true} requiredRole="admin">
-            <Dashboard />
+            <AdminMain />
           </AuthWall>
         ),
         children: [
@@ -93,6 +98,39 @@ const router = createBrowserRouter([
               </AuthWall>
             ),
           },
+          {
+            path: "books", // Child route
+            element: (
+              <AuthWall authentication={true} requiredRole="admin">
+                <AdminBooks />
+              </AuthWall>
+            ),
+          },
+          {
+            path: "users", // Child route
+            element: (
+              <AuthWall authentication={true} requiredRole="admin">
+                <AdminUser />
+              </AuthWall>
+            ),
+          },
+          {
+            path: "dashboard", // Child route
+            element: (
+              <AuthWall authentication={true} requiredRole="admin">
+                <Dashboard />
+              </AuthWall>
+            ),
+          },
+          {
+            path: "add-book", // Child route
+            element: (
+              <AuthWall authentication={true} requiredRole="admin">
+                <BookPost />
+              </AuthWall>
+            ),
+          },
+          
           // Add more admin child routes here
         ],
       },      
