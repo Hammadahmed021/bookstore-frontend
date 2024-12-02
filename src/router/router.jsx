@@ -15,7 +15,8 @@ import {
   Order,
   OrderSingle,
   Register,
-  BookPost
+  BookPost,
+  AdminCategory
 } from "../pages";
 import { AuthWall, RestrictedRoute } from "../components";
 
@@ -127,6 +128,14 @@ const router = createBrowserRouter([
             element: (
               <AuthWall authentication={true} requiredRole="admin">
                 <BookPost />
+              </AuthWall>
+            ),
+          },
+          {
+            path: "categories", // Child route
+            element: (
+              <AuthWall authentication={true} requiredRole="admin">
+                <AdminCategory />
               </AuthWall>
             ),
           },

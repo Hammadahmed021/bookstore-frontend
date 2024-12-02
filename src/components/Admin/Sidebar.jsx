@@ -23,6 +23,14 @@ const Sidebar = () => {
           Books
         </NavLink>
         <NavLink
+          to="/admin/categories"
+          className={({ isActive }) =>
+            `block p-4 hover:bg-gray-700 ${isActive ? "bg-gray-700" : ""}`
+          }
+        >
+          Categories
+        </NavLink>
+        <NavLink
           to="/admin/orders"
           className={({ isActive }) =>
             `block p-4 hover:bg-gray-700 ${isActive ? "bg-gray-700" : ""}`
