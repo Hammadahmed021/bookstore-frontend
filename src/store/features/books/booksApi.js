@@ -3,14 +3,13 @@ import { BASE_URL } from "../../../utils/getBaseUrl";
 import { jwtDecode } from "jwt-decode";
 import Cookies from "js-cookie";
 
-
 const baseQuery = fetchBaseQuery({
   baseUrl: `${BASE_URL()}api/book`,
   credentials: "include",
   prepareHeaders: (Headers) => {
     const token = Cookies.get("token");
     if (token) {
-        // const decoded = jwtDecode(token);
+      // const decoded = jwtDecode(token);
       Headers.set("Authorization", `Bearer ${token}`);
     }
     return Headers;
@@ -26,7 +25,7 @@ const booksApi = createApi({
       query: () => `/get-all`,
       providesTags: ["Books"],
     }),
-    fetchBookById: builder.query({ 
+    fetchBookById: builder.query({
       query: (id) => `/${id}`,
       providesTags: (result, error, id) => [{ type: "Books", id }],
     }),
@@ -39,16 +38,16 @@ const booksApi = createApi({
       invalidatesTags: ["Books"],
     }),
     updateBook: builder.mutation({
-      query: (id, ...rest) => ({
-        url: `/update/${id}`,
-        method: "PUT",
-        body: rest,
-        headers: {
-          "Content-type": "application/json",
-        },
-      }),
+      query: ({ id, formData }) => {
+        return {
+          url: `/update/${id}`, // Ensure this matches your backend route
+          method: "PUT",
+          body: formData, // Using FormData directly          
+        };
+      },
       invalidatesTags: ["Books"],
     }),
+    
     deleteBook: builder.mutation({
       query: (id) => ({
         url: `/delete/${id}`,

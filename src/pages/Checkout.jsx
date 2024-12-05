@@ -16,6 +16,7 @@ const Checkout = () => {
     register,
     handleSubmit,
     watch,
+    setValue,
     formState: { errors },
   } = useForm();
 
@@ -28,7 +29,12 @@ const Checkout = () => {
   const checkUser = useSelector((state) => state.auth.user);
   console.log(checkUser, "checkUser");
 
-  useEffect(() => {}, [checkUser]);
+  // Reset the email field when the user logs out
+  useEffect(() => {
+    if (!checkUser || !checkUser.email) {
+      setValue("email", ""); // Clear the email field
+    }
+  }, [checkUser, setValue]);
 
   const [createOrder, { isLoading, isError, isSuccess, error }] =
     useCreateOrderMutation();
@@ -148,7 +154,7 @@ const Checkout = () => {
                       id="email"
                       type="email"
                       placeholder="email"
-                      defaultValue={(checkUser && checkUser?.email) || ""}
+                      defaultValue={checkUser?.email || ""}
                       register={register}
                       errors={errors}
                     />

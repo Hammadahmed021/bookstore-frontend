@@ -45,7 +45,7 @@ const BookPost = () => {
     }
 
     return (
-        <div className="max-w-3xl mx-auto bg-white p-6 rounded-lg shadow-md">
+        <div className="max-w-3xl mx-auto bg-white p-6 rounded-lg shadow-md border">
             <h2 className="text-2xl font-bold text-gray-800 mb-4">Add a New Book</h2>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                 {/* Title */}

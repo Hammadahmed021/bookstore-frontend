@@ -16,10 +16,10 @@ import {
   OrderSingle,
   Register,
   BookPost,
-  AdminCategory
+  AdminCategory,
+  BookUpdate,
 } from "../pages";
 import { AuthWall, RestrictedRoute } from "../components";
-
 
 const router = createBrowserRouter([
   {
@@ -139,10 +139,18 @@ const router = createBrowserRouter([
               </AuthWall>
             ),
           },
-          
+          {
+            path: "edit-book/:id",
+            element: (
+              <AuthWall authentication={true} requiredRole="admin">
+                <BookUpdate />
+              </AuthWall>
+            ),
+          },
+
           // Add more admin child routes here
         ],
-      },      
+      },
 
       // Admin login route (only accessible to non-authenticated users)
       {
