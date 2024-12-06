@@ -18,6 +18,7 @@ import {
   BookPost,
   AdminCategory,
   BookUpdate,
+  CategorySingle,
 } from "../pages";
 import { AuthWall, RestrictedRoute } from "../components";
 
@@ -57,6 +58,10 @@ const router = createBrowserRouter([
       {
         path: "/book/:id",
         element: <BookSingle />,
+      },
+      {
+        path: "/category/:id",
+        element: <CategorySingle />,
       },
       {
         path: "/order",

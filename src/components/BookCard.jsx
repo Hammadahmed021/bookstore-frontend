@@ -5,11 +5,21 @@ import { getImgUrl } from "../utils/getImage";
 import { Link } from "react-router-dom";
 import { addToCart } from "../store/features/cart/cartSlice";
 import { useDispatch } from "react-redux";
+import { useFetchAllCategoriesQuery } from "../store/features/categories/categoryApi";
 
 const BookCard = ({
   props: { _id, title, coverImage, description, oldPrice, newPrice, category },
 }) => {
+  const { data: allCategories } = useFetchAllCategoriesQuery();
   const dispatch = useDispatch();
+
+
+  const getCategory = allCategories?.data?.filter(
+    (item) => item?._id == category
+  );
+  const getCategoryName = getCategory?.map((item) => {
+    return item?.title;
+  });
 
   const handleAddToCart = () => {
     const product = {
@@ -19,8 +29,10 @@ const BookCard = ({
       newPrice,
       coverImage,
       quantity: 1,
-      category,
+      getCategoryName,
     };
+    console.log(product, 'product');
+    
     dispatch(addToCart(product));
   };
   return (

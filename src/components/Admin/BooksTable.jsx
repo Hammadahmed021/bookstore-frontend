@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import {
   useTable,
   useSortBy,
@@ -9,6 +9,9 @@ import { FaEdit, FaTrash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
 const BooksTable = ({ data = [], loading, error }) => {
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error loading books</div>;
+  if (!data || data.length === 0) return <div>No books available</div>;
   const [search, setSearch] = useState("");
   const navigate = useNavigate();
 
@@ -111,37 +114,31 @@ const BooksTable = ({ data = [], loading, error }) => {
   };
 
   const handleEdit = (value) => {
-    console.log(value, "value id on edit");
-  
     if (!value) {
       console.error("Invalid value passed:", value);
       return;
     }
-  
-    if (data.length === 0) {
-      console.error("No data available to find the book.");
+
+    // Debugging logs
+    const bookData = data?.find((book) => {
+      return book?._id.trim() === value.trim();
+    });
+
+    if (!bookData) {
+      console.error("No matching book found for value:", value);
       return;
     }
-  
-    const bookData = data.find((book) => book?._id === value);
-    console.log(bookData, 'bookData');
-  
-    if (bookData) {
-      try {
-        navigate(`/admin/edit-book/${value}`, { state: { data: bookData } });
-      } catch (error) {
-        console.error("Error navigating to edit book:", error);
-      }
-    } else {
-      console.error("Book not found for id:", value);
+
+    try {
+      navigate(`/admin/edit-book/${value}`, { state: { data: bookData } });
+    } catch (error) {
+      console.error("Error navigating to edit book:", error);
     }
   };
-  
-  
 
   return (
     <>
-      <div className="w-full bg-white shadow-md rounded-lg">
+      <div className="w-full bg-white shadow-md rounded-lg border">
         <div className="flex items-center justify-between p-4 border-b">
           <h2 className="text-lg sm:text-lg font-bold text-admin_text_grey">
             Bookings

@@ -18,7 +18,7 @@ const AuthWall = ({ children, authentication = true, requiredRole = null }) => {
     } else if (!authentication && authStatus) {
       // If authentication is not required and user is logged in, redirect to /admin or /dashboard
       if (userRole === "admin") {
-        navigate("/admin");
+        navigate("/admin/dashboard");
       } else {
         navigate("/dashboard");
       }

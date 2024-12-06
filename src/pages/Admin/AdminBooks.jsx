@@ -4,9 +4,9 @@ import { Link } from 'react-router-dom'
 import { useFetchAllBooksQuery } from '../../store/features/books/booksApi'
 import BooksTable from '../../components/Admin/BooksTable'
 
-const AdminBooks = () => {
+  const AdminBooks = () => {
   const { data: books = [], isLoading, isError } = useFetchAllBooksQuery();
-  console.log(books, 'getAllBooks');
+
 
   return (
     <div>

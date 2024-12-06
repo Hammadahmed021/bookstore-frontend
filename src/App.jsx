@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import { Footer, Navbar, Sidebar } from "./components";
+import { Footer, Navbar, ScrollToTop, Sidebar } from "./components";
 import { useDispatch, useSelector } from "react-redux";
 import { useVerifyUserQuery } from "./store/features/users/usersApi";
 import { clearAuth } from "./store/features/users/userSlice";
@@ -8,15 +8,13 @@ import Cookies from "js-cookie";
 import { Dashboard } from "./pages";
 import { BASE_URL } from "./utils/getBaseUrl";
 
-
-
 export default function App() {
   const dispatch = useDispatch();
   const userRole = useSelector((state) => state.auth.user?.role); // Assuming role is stored in Redux
   const { data, error, isLoading } = useVerifyUserQuery();
 
-  console.log(BASE_URL(), 'BASE_URL');
-  
+  console.log(BASE_URL(), "BASE_URL");
+
   useEffect(() => {
     // Only proceed when the query is not loading
     if (!isLoading) {
@@ -36,16 +34,16 @@ export default function App() {
 
   return (
     <>
+      <ScrollToTop />
       <>
         {userRole === "admin" ? (
           <>
             <div className="min-h-screen font-primary flex">
               <Sidebar />
-              <main className="flex-1 p-6">
+              <main className="flex-1">
                 <Outlet />
               </main>
             </div>
-
           </>
         ) : (
           <>
@@ -57,7 +55,6 @@ export default function App() {
           </>
         )}
       </>
-
     </>
   );
 }

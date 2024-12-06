@@ -6,6 +6,7 @@ export {default as Checkout} from "./Checkout"
 export {default as BookSingle} from "./BookSingle"
 export {default as Order} from "./Order"
 export {default as OrderSingle} from "./OrderSingle"
+export {default as CategorySingle} from "./CategorySingle"
 
 //admin routes
 export {default as Dashboard} from "./Admin/Dashboard"

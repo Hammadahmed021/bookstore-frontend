@@ -33,17 +33,13 @@ const DropDownNavigation = [
 const Navbar = () => {
   const [logoutUser] = useLogoutUserMutation();
   const { data, error, isLoading } = useVerifyUserQuery();
-
   const dispatch = useDispatch();
-  // let currentUser = false;
+
   const [isDropdown, setIsDropdown] = useState(false);
-  // State to manage the current user
   const [currentUser, setCurrentUser] = useState(null);
 
   const cartItems = useSelector((state) => state.cart.cartItems);
   const checkUser = useSelector((state) => state.auth.user);
-
-  // const cartCount = cartItems.reduce((total, item) => total + item.quantity, 0);
 
   const toggleDropdown = () => {
     setIsDropdown((prev) => !prev);
@@ -52,21 +48,29 @@ const Navbar = () => {
   const handleLogout = async () => {
     try {
       const response = await logoutUser().unwrap();
-      console.log(response.message);
+      console.log(response.message, 'text');
       dispatch(clearAuth()); // Clear Redux auth state
       setCurrentUser(null); // Clear local state
     } catch (error) {
       console.error("Logout failed:", error);
     }
   };
+
   useEffect(() => {
     if (data?.user) {
       setCurrentUser(data.user);
     } else {
       setCurrentUser(null);
     }
-  }, [data?.user]);
+  }, [data?.user, checkUser]);  // Add checkUser to dependencies to sync the state when it changes
 
+  useEffect(() => {
+    if (checkUser) {
+      setCurrentUser(checkUser); // Sync currentUser with Redux state if it's available
+    } else {
+      setCurrentUser(null); // Clear local state when user is logged out
+    }
+  }, [checkUser]);
   return (
     <header className="max-w-screen-2xl mx-auto px-4 py-6 font-primary">
       <nav className="flex justify-between items-center">

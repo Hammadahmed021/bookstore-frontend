@@ -1,14 +1,19 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { useFetchBookByIdQuery } from "../store/features/books/booksApi";
 import { getImgUrl } from "../utils/getImage";
 import Button from "../components/Button";
 import { useDispatch, useSelector } from "react-redux";
-import { addToCart, updateCartItemQuantity } from "../store/features/cart/cartSlice";
+import {
+  addToCart,
+  updateCartItemQuantity,
+} from "../store/features/cart/cartSlice";
+import { useFetchAllCategoriesQuery } from "../store/features/categories/categoryApi";
 
 const BookSingle = () => {
   const { id } = useParams();
   const { data: book, isLoading, error } = useFetchBookByIdQuery(id);
+  const { data: allCategories } = useFetchAllCategoriesQuery();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -21,9 +26,17 @@ const BookSingle = () => {
   if (error) return <p>Failed to load book details. Please try again later.</p>;
   if (!book) return <p>Book not found.</p>;
 
-  const { _id, title, coverImage, description, oldPrice, newPrice, category } = book;
+  const { _id, title, coverImage, description, oldPrice, newPrice, category } =
+    book;
 
   const totalPrice = newPrice * quantity;
+
+  const getCategory = allCategories?.data?.filter(
+    (item) => item?._id == book?.category
+  );
+  const getCategoryName = getCategory?.map((item) => {
+    return item?.title;
+  });
 
   // Handle Quantity Change
   const handleQuantityChange = (type) => {
@@ -44,7 +57,7 @@ const BookSingle = () => {
       newPrice,
       coverImage,
       quantity,
-      category,
+      getCategoryName,
     };
     dispatch(addToCart(product));
   };
@@ -70,18 +83,25 @@ const BookSingle = () => {
         <div className="md:w-1/2 flex flex-col justify-between">
           <div>
             {/* Product Title */}
-            <h1 className="text-3xl font-extrabold text-gray-900 mb-4">{title}</h1>
+            <h1 className="text-3xl font-extrabold text-gray-900 mb-4">
+              {title}
+            </h1>
             <p className="text-lg text-gray-500 mb-2">
-              <b>Category:</b> <span className="font-medium">{category}</span>
+              <b>Category:</b>{" "}
+              <span className="font-medium">{getCategoryName}</span>
             </p>
             <p className="text-base text-gray-700 mb-6">{description}</p>
 
             {/* Price Display */}
             <div className="flex items-center gap-4 mb-6">
               <span className="text-lg font-medium">Price:</span>
-              <span className="text-lg font-semibold text-blue-600">${newPrice}</span>
+              <span className="text-lg font-semibold text-blue-600">
+                ${newPrice}
+              </span>
               {oldPrice && (
-                <span className="text-lg text-gray-500 line-through">${oldPrice}</span>
+                <span className="text-lg text-gray-500 line-through">
+                  ${oldPrice}
+                </span>
               )}
             </div>
 
@@ -102,7 +122,6 @@ const BookSingle = () => {
                   +
                 </button>
               </div>
-
             </div>
           </div>
 
@@ -126,12 +145,14 @@ const BookSingle = () => {
 
           {/* Total  */}
           <p className="text-lg font-medium mt-4 flex gap-4">
-            Total: <span className="text-blue-600 font-semibold">${totalPrice.toFixed(2)}</span>
+            Total:{" "}
+            <span className="text-blue-600 font-semibold">
+              ${totalPrice.toFixed(2)}
+            </span>
           </p>
         </div>
       </div>
     </div>
-
   );
 };
 

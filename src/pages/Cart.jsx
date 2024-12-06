@@ -87,7 +87,7 @@ const Cart = () => {
                           </p>
                         </div>
                         <p className="mt-1 text-sm text-gray-500 capitalize">
-                          <strong>Category:</strong> {product?.category}
+                          <strong>Category:</strong> {product?.getCategoryName}
                         </p>
                       </div>
                       <div className="flex flex-1 flex-wrap items-end justify-between space-y-2 text-sm">

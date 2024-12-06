@@ -1,31 +1,26 @@
 import React, { useEffect, useState } from "react";
-import { booksData } from "../utils/localDB";
 import BookCard from "./BookCard";
 import SwiperComponent from "./SwiperComponent";
 import { useFetchAllBooksQuery } from "../store/features/books/booksApi";
+import { useFetchAllCategoriesQuery } from "../store/features/categories/categoryApi";
 
 const TopSeller = () => {
-  // const [books, setBooks] = useState(null);
   const [selectCategory, setSelectCategory] = useState("Choose a genre");
-  // useEffect(() => {
-  //   setBooks(booksData);
-  // }, []);
+
   const { data: books = [] } = useFetchAllBooksQuery();
-  console.log(books, 'books');
-  
+  const { data: categories } = useFetchAllCategoriesQuery();
 
-  const categoryOptions = [
-    "Choose a genre",
-    "Business",
-    "Fiction",
-    "Horror",
-    "Adventure",
-  ];
+
   const filterBooks =
-    selectCategory === "Choose a genre"
-      ? books
-      : books.filter((item) => item.category === selectCategory.toLowerCase());
-
+  selectCategory === "Choose a genre"
+    ? books
+    : books.filter((item) => {
+        const selectedCategory = categories?.data?.find(
+          (category) => category.title === selectCategory
+        );
+        return item.category === selectedCategory?._id;
+      });
+      
   return (
     <div className="py-10">
       <h2 className="text-3xl font-semibold mb-6">TopSeller</h2>
@@ -36,9 +31,9 @@ const TopSeller = () => {
         id="category"
         className="bg-gray-100 rounded-md outline-none p-1 mb-10"
       >
-        {categoryOptions?.map((category, index) => (
-          <option key={index} value={category}>
-            {category}
+        {categories?.data?.map((category) => (
+          <option key={category?._id} value={category.title}>
+            {category.title}
           </option>
         ))}
       </select>

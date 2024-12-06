@@ -7,6 +7,7 @@ import { useDispatch } from "react-redux";
 import { useAdminLoginMutation } from "../../store/features/users/usersApi";
 import Button from "../../components/Button";
 import { setAuth } from "../../store/features/users/userSlice";
+import { showSuccessToast } from "../../utils/toast";
 
 const AdminLogin = () => {
   const dispatch = useDispatch();
@@ -25,9 +26,8 @@ const AdminLogin = () => {
       const response = await loginAdmin(data).unwrap(); // The unwrap will allow you to catch the response or error
       if (response) {
         dispatch(setAuth({ user: response, token: response.token }));
-        navigate('/admin/orders')
       }
-      console.log(response, "User login successfully");
+      showSuccessToast("Admin login successfully");
     } catch (error) {
       console.error("Registration failed", error);
     }

@@ -90,8 +90,8 @@ const AdminCategory = () => {
   if (isLoading) return <p>Loading categories...</p>;
 
   return (
-    <div className="p-4">
-    <h1 className="text-xl font-bold mb-4">Category Management</h1>
+    <div className="">
+    <h1 className="text-xl font-semibold mb-4">Category Management</h1>
 
     <form onSubmit={handleSubmit(onSubmit)} className="mb-6">
       <div className="mb-4">
