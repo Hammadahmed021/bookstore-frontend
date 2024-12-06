@@ -13,6 +13,8 @@ const Order = () => {
   const { data: verifyUser } = useVerifyUserQuery();
   const userId = verifyUser?.user?.id;
 
+  console.log(userId, 'userId');
+  
   const { data, error, isLoading } = useFetchOrdersByUserIdQuery(userId);
 
   if (isLoading) {
@@ -22,6 +24,7 @@ const Order = () => {
   if (error) {
     return <div>Error: {error.message}</div>;
   }
+
 
   return (
     <div className="container mx-auto p-4">

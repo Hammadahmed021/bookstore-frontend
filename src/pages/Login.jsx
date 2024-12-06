@@ -7,6 +7,7 @@ import { useDispatch } from "react-redux";
 import { useLoginUserMutation } from "../store/features/users/usersApi";
 import Button from "../components/Button";
 import { setAuth } from "../store/features/users/userSlice";
+import { showErrorToast, showSuccessToast } from "../utils/toast";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -36,8 +37,9 @@ const Login = () => {
         dispatch(setAuth({ user: response, token: response.token, role: userRole }));
       }
     
-      console.log(response, "User login successfully");
+      showSuccessToast("User login successfully");
     } catch (error) {
+      showErrorToast(error)
       console.error("Login failed", error); // Handle login error properly
     }
    
@@ -106,6 +108,7 @@ const Login = () => {
             {" "}
             Register
           </Link>
+          <Link to={'/forgot-password'}>forgot?</Link>
         </p>
         <div className="mt-4">
           <button

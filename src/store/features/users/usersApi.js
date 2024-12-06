@@ -5,6 +5,7 @@ import {
   getFirebaseTokenForLogin,
   getFirebaseTokenForRegister,
 } from "../../../utils/helperFunctions";
+import { deleteUser } from "firebase/auth";
 
 // Base query setup for API calls
 const baseQuery = fetchBaseQuery({
@@ -35,9 +36,11 @@ const authApi = createApi({
     // Register User Mutation
     registerUser: builder.mutation({
       async queryFn(newUser, _queryApi, _extraOptions, baseQueryFn) {
+        let user = null;
         try {
-          // Generate Firebase Token
-          const { token, user } = await getFirebaseTokenForRegister(newUser);
+          // Generate Firebase Token and create user in Firebase
+          const { token, createdUser } = await getFirebaseTokenForRegister(newUser);
+          user = createdUser;
 
           // Save the Firebase token in cookies
           Cookies.set("token", token, { expires: 7 }); // Set cookie for 7 days
@@ -47,10 +50,11 @@ const authApi = createApi({
             name: newUser.name,
             email: newUser.email,
             password: newUser.password,
+            role: "user",
             idToken: token, // Ensure the ID token is passed correctly
           };
 
-          // Call the backend API
+          // Step 1: Call the backend API to register the user
           const result = await baseQueryFn({
             url: "/register",
             method: "POST",
@@ -58,8 +62,11 @@ const authApi = createApi({
           });
 
           if (result.error) throw result.error;
+
+          // Return the result along with token and user
           return { data: { ...result.data, token: token, user: user } };
         } catch (error) {
+
           return { error: { status: "CUSTOM_ERROR", error: error.message } };
         }
       },
@@ -166,6 +173,50 @@ const authApi = createApi({
         }
       },
     }),
+
+    // Forgot password mutation
+    forgotPassword: builder.mutation({
+      async queryFn(email, _queryApi, _extraOptions, baseQueryFn) {
+        try {
+          const payload = { email };
+
+          // Call backend API to send reset email
+          const result = await baseQueryFn({
+            url: "/forgot-password", // Your backend endpoint
+            method: "POST",
+            body: payload,
+          });
+
+          if (result.error) throw result.error;
+
+          return { data: result.data }; // Return the success message or response from backend
+        } catch (error) {
+          return { error: { status: "CUSTOM_ERROR", error: error.message } };
+        }
+      },
+    }),
+
+    // Set new password mutation
+    setNewPassword: builder.mutation({
+      async queryFn({ idToken, newPassword }, _queryApi, _extraOptions, baseQueryFn) {
+        try {
+          const payload = { idToken, newPassword };
+
+          // Call backend API to set the new password
+          const result = await baseQueryFn({
+            url: "/set-new-password", // Your backend endpoint
+            method: "POST",
+            body: payload,
+          });
+
+          if (result.error) throw result.error;
+
+          return { data: result.data }; // Return success message after password reset
+        } catch (error) {
+          return { error: { status: "CUSTOM_ERROR", error: error.message } };
+        }
+      },
+    }),
   }),
 });
 
@@ -175,7 +226,9 @@ export const {
   useAdminLoginMutation,
   useVerifyUserQuery,
   useLogoutUserMutation,
-  useFetchAllUsersQuery
+  useFetchAllUsersQuery,
+  useSetNewPasswordMutation,
+  useForgotPasswordMutation
 } = authApi;
 
 export default authApi;

@@ -19,6 +19,7 @@ import {
   AdminCategory,
   BookUpdate,
   CategorySingle,
+  ForgotPassword,
 } from "../pages";
 import { AuthWall, RestrictedRoute } from "../components";
 
@@ -62,6 +63,11 @@ const router = createBrowserRouter([
       {
         path: "/category/:id",
         element: <CategorySingle />,
+      },
+      {
+        path: "/forgot-password",
+        element: <ForgotPassword />,
+        
       },
       {
         path: "/order",

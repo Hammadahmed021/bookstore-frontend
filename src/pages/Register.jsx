@@ -5,8 +5,13 @@ import { Link } from "react-router-dom";
 import { FaGoogle } from "react-icons/fa";
 import Button from "../components/Button";
 import { useRegisterUserMutation } from "../store/features/users/usersApi";
+import { useDispatch } from "react-redux";
+import { setAuth } from "../store/features/users/userSlice";
+import { showErrorToast, showSuccessToast } from "../utils/toast";
 
 const Register = () => {
+  const dispatch = useDispatch();
+
   const {
     register,
     handleSubmit,
@@ -18,10 +23,20 @@ const Register = () => {
     useRegisterUserMutation();
 
   const onSubmit = async (data) => {
+    
     try {
       const response = await registerUser(data).unwrap(); // The unwrap will allow you to catch the response or error
-      console.log(response, "User registered successfully");
+     console.log(response, 'response >><<<<<<<');
+     
+      const isAdmin = response.name === "admin"; // Strictly check for admin
+      const userRole = isAdmin ? "admin" : "user"; // Assign the correct role
+      if (response) {
+        // Dispatch the role along with the user data and token
+        dispatch(setAuth({ user: response, token: response.token, role: userRole }));
+      }
+      showSuccessToast("User registered successfully");
     } catch (error) {
+      showErrorToast(error);
       console.error("Registration failed", error);
     }
   };
