@@ -40,7 +40,7 @@ export default function App() {
           <>
             <div className="min-h-screen font-primary flex">
               <Sidebar />
-              <main className="flex-1">
+              <main className="w-full">
                 <Outlet />
               </main>
             </div>

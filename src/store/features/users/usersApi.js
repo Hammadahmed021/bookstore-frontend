@@ -204,7 +204,7 @@ const authApi = createApi({
 
           // Call backend API to set the new password
           const result = await baseQueryFn({
-            url: "/set-new-password", // Your backend endpoint
+            url: "/new-password", // Your backend endpoint
             method: "POST",
             body: payload,
           });

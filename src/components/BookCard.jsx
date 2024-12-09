@@ -38,12 +38,12 @@ const BookCard = ({
   return (
     <div className=" rounded-lg transition-shadow duration-300">
       <div className="flex flex-col sm:flex-row sm:items-center sm:h-72  sm:justify-center gap-4">
-        <div className="sm:h-72 sm:flex-shrink-0 border rounded-md max-w-44">
+        <div className="h-52 sm:h-72 sm:flex-shrink-0 border rounded-md w-full sm:max-w-44">
           <Link to={`/book/${_id}`}>
             <img
               src={getImgUrl(coverImage)} // This will now use the correct URL from the backend
               alt={title}
-              className="w-full bg-cover p-2 rounded-md cursor-pointer hover:scale-105 transition-all duration-200"
+              className="h-52 sm:h-72 w-full bg-cover p-2 rounded-md cursor-pointer hover:scale-105 transition-all duration-200"
             />
 
           </Link>

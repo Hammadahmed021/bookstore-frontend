@@ -20,6 +20,7 @@ import {
   BookUpdate,
   CategorySingle,
   ForgotPassword,
+  UserDashboard,
 } from "../pages";
 import { AuthWall, RestrictedRoute } from "../components";
 
@@ -89,7 +90,7 @@ const router = createBrowserRouter([
         path: "/dashboard",
         element: (
           <AuthWall authentication={true}>
-            <h2>Dashboard</h2>
+           <UserDashboard />
           </AuthWall>
         ),
       },
