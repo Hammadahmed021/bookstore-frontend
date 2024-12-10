@@ -6,6 +6,7 @@ import booksApi from "./features/books/booksApi";
 import authApi from "./features/users/usersApi";
 import ordersApi from "./features/orders/orderApi";
 import categoriesApi from "./features/categories/categoryApi";
+import { wishlistApi } from "./features/wishlist/wishlistApi";
 
 const persistConfig = {
   key: "root",
@@ -20,7 +21,7 @@ export const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: false, // Disable serializable check for redux-persist compatibility
-    }).concat(booksApi.middleware, authApi.middleware, ordersApi.middleware, categoriesApi.middleware), // Add API middleware
+    }).concat(booksApi.middleware, authApi.middleware, ordersApi.middleware, categoriesApi.middleware, wishlistApi.middleware), // Add API middleware
 });
 
 

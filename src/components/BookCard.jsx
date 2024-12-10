@@ -1,18 +1,28 @@
 import React from "react";
 import { FiShoppingCart } from "react-icons/fi";
+import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import Button from "./Button";
 import { getImgUrl } from "../utils/getImage";
 import { Link } from "react-router-dom";
 import { addToCart } from "../store/features/cart/cartSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useFetchAllCategoriesQuery } from "../store/features/categories/categoryApi";
+import {
+  useAddToWishlistMutation,
+  useRemoveFromWishlistMutation,
+} from "../store/features/wishlist/wishlistApi";
+import WishlistButton from "./WishlistButton";
 
 const BookCard = ({
   props: { _id, title, coverImage, description, oldPrice, newPrice, category },
+  isFavorite = false,
 }) => {
   const { data: allCategories } = useFetchAllCategoriesQuery();
+  const [addToWishlist] = useAddToWishlistMutation();
   const dispatch = useDispatch();
 
+  const auth = useSelector((state) => state.auth.user);
+  console.log(auth, "auth");
 
   const getCategory = allCategories?.data?.filter(
     (item) => item?._id == category
@@ -31,24 +41,25 @@ const BookCard = ({
       quantity: 1,
       getCategoryName,
     };
-    console.log(product, 'product');
-    
     dispatch(addToCart(product));
   };
+
+
   return (
-    <div className=" rounded-lg transition-shadow duration-300">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:h-72  sm:justify-center gap-4">
-        <div className="h-52 sm:h-72 sm:flex-shrink-0 border rounded-md w-full sm:max-w-44">
+    <div className="rounded-lg transition-shadow duration-300">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:h-72 sm:justify-center gap-4">
+        <div className="relative h-52 sm:h-72 sm:flex-shrink-0 border rounded-md w-full sm:max-w-44">
           <Link to={`/book/${_id}`}>
             <img
-              src={getImgUrl(coverImage)} // This will now use the correct URL from the backend
+              src={getImgUrl(coverImage)}
               alt={title}
               className="h-52 sm:h-72 w-full bg-cover p-2 rounded-md cursor-pointer hover:scale-105 transition-all duration-200"
             />
-
           </Link>
+          {auth && (
+            <WishlistButton bookId={_id} />
+          )}
         </div>
-
         <div>
           <Link to={`/book/${_id}`}>
             <h3 className="text-xl font-semibold hover:text-blue-600 mb-3">
@@ -64,10 +75,6 @@ const BookCard = ({
             ${newPrice}{" "}
             <span className="line-through font-normal ml-2">${oldPrice}</span>
           </p>
-          {/* <button className="btn-primary px-6 space-x-1 flex items-center gap-1 ">
-            <FiShoppingCart className="" />
-            <span>Add to Cart</span>
-          </button> */}
           <Button icon={true} text={"Add to cart"} onClick={handleAddToCart} />
         </div>
       </div>

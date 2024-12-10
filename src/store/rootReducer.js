@@ -5,6 +5,7 @@ import authApi from "./features/users/usersApi";
 import authSlice from "./features/users/userSlice";
 import ordersApi from "./features/orders/orderApi";
 import categoriesApi from "./features/categories/categoryApi";
+import { wishlistApi } from "./features/wishlist/wishlistApi";
 
 const rootReducer = combineReducers({
   cart: cartSlice, // This is persisted
@@ -13,6 +14,7 @@ const rootReducer = combineReducers({
   [authApi.reducerPath]: authApi.reducer,
   [ordersApi.reducerPath]: ordersApi.reducer,
   [categoriesApi.reducerPath]: categoriesApi.reducer,
+  [wishlistApi.reducerPath]: wishlistApi.reducer,
 });
 
 export default rootReducer;

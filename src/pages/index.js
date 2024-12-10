@@ -9,6 +9,7 @@ export {default as OrderSingle} from "./OrderSingle"
 export {default as CategorySingle} from "./CategorySingle"
 export {default as ForgotPassword} from "./ForgotPassword"
 export {default as UserDashboard} from "./UserDashboard"
+export {default as Wishlist} from "./Wishlist"
 
 //admin routes
 export {default as Dashboard} from "./Admin/Dashboard"

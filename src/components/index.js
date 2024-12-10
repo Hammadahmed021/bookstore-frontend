@@ -13,3 +13,4 @@ export { default as RestrictedRoute } from "./RestrictedRoute";
 export { default as Sidebar } from "./Admin/Sidebar";
 export { default as ScrollToTop } from "./ScrollToTop";
 export { default as Categories } from "./Categories";
+export { default as WishlistButton } from "./WishlistButton";

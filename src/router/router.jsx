@@ -21,6 +21,7 @@ import {
   CategorySingle,
   ForgotPassword,
   UserDashboard,
+  Wishlist,
 } from "../pages";
 import { AuthWall, RestrictedRoute } from "../components";
 
@@ -58,6 +59,10 @@ const router = createBrowserRouter([
         element: <Checkout />,
       },
       {
+        path: "/wishlist",
+        element: <Wishlist />,
+      },
+      {
         path: "/book/:id",
         element: <BookSingle />,
       },
@@ -68,7 +73,6 @@ const router = createBrowserRouter([
       {
         path: "/forgot-password",
         element: <ForgotPassword />,
-        
       },
       {
         path: "/order",
@@ -90,7 +94,7 @@ const router = createBrowserRouter([
         path: "/dashboard",
         element: (
           <AuthWall authentication={true}>
-           <UserDashboard />
+            <UserDashboard />
           </AuthWall>
         ),
       },

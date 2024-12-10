@@ -134,9 +134,9 @@ const Navbar = () => {
             </Link>
           )}
 
-          <button className="hidden sm:block">
+          <Link className="hidden sm:block" to={"/wishlist"}>
             <HiOutlineHeart className="size-6" color="#222" />
-          </button>
+          </Link>
           <Link
             to={"/cart"}
             className="bg-primary p-1 rounded-md flex items-center py-2 sm:px-4"
