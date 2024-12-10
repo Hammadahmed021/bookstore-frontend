@@ -10,6 +10,7 @@ import {
   useVerifyUserQuery,
 } from "../store/features/users/usersApi";
 import { clearAuth, setAuth } from "../store/features/users/userSlice";
+import { useGetWishlistQuery } from "../store/features/wishlist/wishlistApi";
 
 const DropDownNavigation = [
   {
@@ -33,6 +34,15 @@ const DropDownNavigation = [
 const Navbar = () => {
   const [logoutUser] = useLogoutUserMutation();
   const { data, error, isLoading } = useVerifyUserQuery();
+  const { data: wishlist} = useGetWishlistQuery();
+  
+  // const wishlistCount = wishlist?.favorites?.reduce((a, obj) => a + Object.keys(obj).length, 0)
+  const wishlistCount = wishlist?.favorites?.length
+  console.log(wishlistCount, 'wishlistCount');
+  console.log(wishlist?.favorites?.length, 'wishlist?.favorites?.length');
+  
+  
+
   const dispatch = useDispatch();
 
   const [isDropdown, setIsDropdown] = useState(false);
@@ -48,7 +58,7 @@ const Navbar = () => {
   const handleLogout = async () => {
     try {
       const response = await logoutUser().unwrap();
-      console.log(response.message, 'text');
+      console.log(response.message, "text");
       dispatch(clearAuth()); // Clear Redux auth state
       setCurrentUser(null); // Clear local state
     } catch (error) {
@@ -62,7 +72,7 @@ const Navbar = () => {
     } else {
       setCurrentUser(null);
     }
-  }, [data?.user, checkUser]);  // Add checkUser to dependencies to sync the state when it changes
+  }, [data?.user, checkUser]); // Add checkUser to dependencies to sync the state when it changes
 
   useEffect(() => {
     if (checkUser) {
@@ -133,10 +143,12 @@ const Navbar = () => {
               <HiOutlineUser className="size-6" color="#222" />
             </Link>
           )}
-
-          <Link className="hidden sm:block" to={"/wishlist"}>
-            <HiOutlineHeart className="size-6" color="#222" />
-          </Link>
+      
+              <Link className=" p-1 rounded-md flex items-center relative" to={"/wishlist"}>
+                <HiOutlineHeart className="size-6" color="#222" />
+                {wishlistCount > 0 && <sup className="-mt-2 -ml-2 bg-red-500 text-white rounded-full w-4 h-4 flex items-center justify-center">{wishlistCount}</sup>}
+              </Link>
+            
           <Link
             to={"/cart"}
             className="bg-primary p-1 rounded-md flex items-center py-2 sm:px-4"

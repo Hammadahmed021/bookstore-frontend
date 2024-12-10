@@ -30,10 +30,10 @@ const WishlistButton = ({ bookId }) => {
 
   return (
     <div
-      className="absolute top-2 right-2 cursor-pointer text-red-500"
+      className="absolute items-center justify-center cursor-pointer text-red-500"
       onClick={handleToggleWishlist}
     >
-      {isFavorite ? <AiFillHeart size={24} /> : <AiOutlineHeart size={24} />}
+      {isFavorite ? <AiFillHeart size={22} /> : <AiOutlineHeart size={22} />}
     </div>
   );
 };

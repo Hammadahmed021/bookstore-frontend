@@ -22,7 +22,6 @@ const BookCard = ({
   const dispatch = useDispatch();
 
   const auth = useSelector((state) => state.auth.user);
-  console.log(auth, "auth");
 
   const getCategory = allCategories?.data?.filter(
     (item) => item?._id == category
@@ -44,10 +43,9 @@ const BookCard = ({
     dispatch(addToCart(product));
   };
 
-
   return (
     <div className="rounded-lg transition-shadow duration-300">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:h-72 sm:justify-center gap-4">
+      <div className="relative flex flex-col sm:flex-row sm:items-center sm:h-72 sm:justify-center gap-4">
         <div className="relative h-52 sm:h-72 sm:flex-shrink-0 border rounded-md w-full sm:max-w-44">
           <Link to={`/book/${_id}`}>
             <img
@@ -56,11 +54,13 @@ const BookCard = ({
               className="h-52 sm:h-72 w-full bg-cover p-2 rounded-md cursor-pointer hover:scale-105 transition-all duration-200"
             />
           </Link>
-          {auth && (
-            <WishlistButton bookId={_id} />
-          )}
         </div>
-        <div>
+        {auth && (
+          <span className="w-8 h-8 p-1 bg-white border rounded-full absolute top-2 right-2 flex items-baseline justify-center">
+            <WishlistButton bookId={_id} />
+          </span>
+        )}
+        <div className="relative">
           <Link to={`/book/${_id}`}>
             <h3 className="text-xl font-semibold hover:text-blue-600 mb-3">
               {title?.length > 25 ? `${title?.slice(0, 25)}...` : title}
