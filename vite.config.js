@@ -19,9 +19,9 @@ export default defineConfig(({ command, mode }) => {
       sourcemap: false,
       target: 'modules',
     },
-    define: {
-      // Optionally, define any global constants here
-      __APP_ENV__: JSON.stringify(env.APP_ENV),
-    }
+    // define: {
+    //   // Optionally, define any global constants here
+    //   __APP_ENV__: JSON.stringify(env.APP_ENV),
+    // }
   };
 });
