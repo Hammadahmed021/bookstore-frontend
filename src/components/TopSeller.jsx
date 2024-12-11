@@ -8,18 +8,18 @@ const TopSeller = () => {
   const [selectCategory, setSelectCategory] = useState("Choose a genre");
 
   const { data: books = [] } = useFetchAllBooksQuery();
-  const { data: categories } = useFetchAllCategoriesQuery();
+    const { data: categories } = useFetchAllCategoriesQuery();
 
 
-  const filterBooks =
-  selectCategory === "Choose a genre"
-    ? books
-    : books.filter((item) => {
-        const selectedCategory = categories?.data?.find(
-          (category) => category.title === selectCategory
-        );
-        return item.category === selectedCategory?._id;
-      });
+    const filterBooks =
+    selectCategory === "Choose a genre"
+      ? books
+      : books.filter((item) => {
+          const selectedCategory = categories?.data?.find(
+            (category) => category.title === selectCategory
+          );
+          return item.category === selectedCategory?._id;
+        });
       
   return (
     <div className="py-10">

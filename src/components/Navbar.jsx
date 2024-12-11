@@ -34,14 +34,14 @@ const DropDownNavigation = [
 const Navbar = () => {
   const [logoutUser] = useLogoutUserMutation();
   const { data, error, isLoading } = useVerifyUserQuery();
-  const { data: wishlist} = useGetWishlistQuery();
-  
+  const { data: wishlist } = useGetWishlistQuery();
+
   // const wishlistCount = wishlist?.favorites?.reduce((a, obj) => a + Object.keys(obj).length, 0)
   const wishlistCount = wishlist?.favorites?.length
   console.log(wishlistCount, 'wishlistCount');
   console.log(wishlist?.favorites?.length, 'wishlist?.favorites?.length');
-  
-  
+
+
 
   const dispatch = useDispatch();
 
@@ -81,6 +81,7 @@ const Navbar = () => {
       setCurrentUser(null); // Clear local state when user is logged out
     }
   }, [checkUser]);
+
   return (
     <header className="max-w-screen-2xl mx-auto px-4 py-6 font-primary">
       <nav className="flex justify-between items-center">
@@ -100,10 +101,20 @@ const Navbar = () => {
             />
           </div>
         </div>
-        <div className="relative flex items-center gap-3">
+        <div className="relative flex items-center gap-4">
+          <ul className="flex items-center gap-4 pr-4 border-black border-r-2">
+            <li>
+              <Link className="hover:underline duration-200 transition-all" to={"/shop"}>Shop</Link>
+            </li>
+            <li>
+              <Link className="hover:underline duration-200 transition-all" to={"/contact"}>
+              Contact us</Link>
+            </li>
+            
+          </ul>
           {currentUser || checkUser ? (
-            <>
-              <button onClick={toggleDropdown} className="flex gap-2">
+            <div className="relative">
+              <button onClick={toggleDropdown} className="flex items-center gap-2">
                 <img
                   src={avatar}
                   alt=""
@@ -113,7 +124,7 @@ const Navbar = () => {
               </button>
               {isDropdown && (
                 <>
-                  <div className="absolute right-0 mt-2 top-8 p-1 border w-full rounded-lg shadow-lg bg-white z-10">
+                  <div className="absolute w-full right-0 mt-2 top-8 p-1 border rounded-lg shadow-lg bg-white z-10">
                     <ul className="text-xs sm:text-sm">
                       {DropDownNavigation.map((item) => (
                         <li key={item.name}>
@@ -137,18 +148,18 @@ const Navbar = () => {
                   </div>
                 </>
               )}
-            </>
+            </div>
           ) : (
             <Link to={"/login"}>
               <HiOutlineUser className="size-6" color="#222" />
             </Link>
           )}
-      
-              <Link className=" p-1 rounded-md flex items-center relative" to={"/wishlist"}>
-                <HiOutlineHeart className="size-6" color="#222" />
-                {wishlistCount > 0 && <sup className="-mt-2 -ml-2 bg-red-500 text-white rounded-full w-4 h-4 flex items-center justify-center">{wishlistCount}</sup>}
-              </Link>
-            
+
+          <Link className=" p-1 rounded-md flex items-center relative" to={"/wishlist"}>
+            <HiOutlineHeart className="size-6" color="#222" />
+            {wishlistCount > 0 && <sup className="-mt-2 -ml-2 bg-red-500 text-white rounded-full w-4 h-4 flex items-center justify-center">{wishlistCount}</sup>}
+          </Link>
+
           <Link
             to={"/cart"}
             className="bg-primary p-1 rounded-md flex items-center py-2 sm:px-4"

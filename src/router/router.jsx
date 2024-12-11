@@ -22,6 +22,7 @@ import {
   ForgotPassword,
   UserDashboard,
   Wishlist,
+  Shop,
 } from "../pages";
 import { AuthWall, RestrictedRoute } from "../components";
 
@@ -33,6 +34,10 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <Home />,
+      },
+      {
+        path: "*",
+        element: <h5>404, Not found</h5>
       },
       {
         path: "/login",
@@ -73,6 +78,10 @@ const router = createBrowserRouter([
       {
         path: "/forgot-password",
         element: <ForgotPassword />,
+      },
+      {
+        path: "/shop",
+        element: <Shop />
       },
       {
         path: "/order",
@@ -178,6 +187,7 @@ const router = createBrowserRouter([
         ),
       },
     ],
+
   },
 ]);
 
