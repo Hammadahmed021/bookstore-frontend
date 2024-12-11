@@ -14,10 +14,10 @@ export default defineConfig(({ mode }) => {
   return {
     plugins: [react()],
     base: baseURL,
-    build: {
-      minify: true,
-      sourcemap: false,
-      target: 'modules',
-    },
+    // build: {
+    //   minify: true,
+    //   sourcemap: false,
+    //   target: 'modules',
+    // },
   };
 });
