@@ -6,14 +6,13 @@ import { clearAuth } from "./store/features/users/userSlice";
 import { useEffect } from "react";
 import Cookies from "js-cookie";
 import { Dashboard } from "./pages";
-import { BASE_URL } from "./utils/getBaseUrl";
+// import { BASE_URL } from "./utils/getBaseUrl";
 
 export default function App() {
   const dispatch = useDispatch();
   const userRole = useSelector((state) => state.auth.user?.role); // Assuming role is stored in Redux
   const { data, error, isLoading } = useVerifyUserQuery();
 
-  console.log(BASE_URL(), "BASE_URL");
 
   useEffect(() => {
     // Only proceed when the query is not loading

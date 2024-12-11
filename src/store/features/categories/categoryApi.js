@@ -1,9 +1,14 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { BASE_URL } from "../../../utils/getBaseUrl";
+import {  getBaseURL } from "../../../utils/getBaseUrl";
 import Cookies from "js-cookie";
 
+
+
+const BASE_URL = getBaseURL(); // Call the function to get the URL
+
+
 const baseQuery = fetchBaseQuery({
-  baseUrl: `${BASE_URL()}api/category`,
+  baseUrl: `${BASE_URL}api/category`,
   credentials: "include",
   prepareHeaders: (headers) => {
     const token = Cookies.get("token");

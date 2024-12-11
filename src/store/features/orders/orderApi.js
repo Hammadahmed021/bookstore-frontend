@@ -1,10 +1,13 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { BASE_URL } from "../../../utils/getBaseUrl"; // Assuming you have a utility to fetch the base URL
+import { getBaseURL } from "../../../utils/getBaseUrl"; // Assuming you have a utility to fetch the base URL
 import Cookies from "js-cookie";
+
+const BASE_URL = getBaseURL(); // Call the function to get the URL
+
 
 // Base query for API calls with token authentication
 const baseQuery = fetchBaseQuery({
-  baseUrl: `${BASE_URL()}api/order`, // Your API endpoint for orders
+  baseUrl: `${BASE_URL}api/order`, // Your API endpoint for orders
   credentials: "include",
   prepareHeaders: (headers) => {
     const token = Cookies.get("token");

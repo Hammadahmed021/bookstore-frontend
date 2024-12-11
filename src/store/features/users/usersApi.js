@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { BASE_URL } from "../../../utils/getBaseUrl";
+import {  getBaseURL } from "../../../utils/getBaseUrl";
 import Cookies from "js-cookie";
 import {
   getFirebaseTokenForLogin,
@@ -7,9 +7,12 @@ import {
 } from "../../../utils/helperFunctions";
 import { deleteUser } from "firebase/auth";
 
+
+
+const BASE_URL = getBaseURL(); // Call the function to get the URL
 // Base query setup for API calls
 const baseQuery = fetchBaseQuery({
-  baseUrl: `${BASE_URL()}api/user`, // Your auth endpoint
+  baseUrl: `${BASE_URL}api/user`, // Your auth endpoint
   credentials: "include",
   prepareHeaders: (headers) => {
     const token = Cookies.get("token"); // Retrieve the token from cookies
