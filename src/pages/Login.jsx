@@ -53,7 +53,7 @@ const Login = () => {
 
   return (
     <div className="h-[calc(100vh-120px)] flex items-center justify-center">
-      <div className="w-full max-w-sm mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+      <div className="w-full max-w-sm mx-auto bg-white border shadow-md rounded px-8 pt-6 pb-8 mb-4">
         <h2 className="text-xl font-semibold mb-4">Please Login</h2>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="mb-4">
@@ -107,7 +107,7 @@ const Login = () => {
           {/* <p className="text-red-500 text-xs italic mb-3">Message</p> */}
 
           <div className="flex flex-wrap space-y-2.5 items-center justify-between">
-            <button
+            <button 
               className="bg-primary border rounded-lg w-full text-white px-6 py-2  hover:bg-opacity-80 flex items-center justify-center"
 
               disabled={isSubmitting || isLoadingLogin}

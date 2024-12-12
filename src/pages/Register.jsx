@@ -16,13 +16,13 @@ const Register = () => {
     register,
     handleSubmit,
     watch,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm();
 
   const [registerUser, { isLoading, isError, error: apiError }] =
     useRegisterUserMutation();
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data) => { 
     
     try {
       const response = await registerUser(data).unwrap(); // The unwrap will allow you to catch the response or error
@@ -44,7 +44,7 @@ const Register = () => {
 
   return (
     <div className="h-[calc(100vh-120px)] flex items-center justify-center">
-      <div className="w-full max-w-sm mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+      <div className="w-full max-w-sm mx-auto bg-white border shadow-md rounded px-8 pt-6 pb-8 mb-4">
         <h2 className="text-xl font-semibold mb-4">Please Register</h2>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="mb-4">
@@ -113,11 +113,21 @@ const Register = () => {
           {/* <p className="text-red-500 text-xs italic mb-3">Message</p> */}
 
           <div className="flex flex-wrap space-y-2.5 items-center justify-between">
-            <Button text={"Register"} />
+            <button
+              className="bg-primary border rounded-lg w-full text-white px-6 py-2  hover:bg-opacity-80 flex items-center justify-center"
+
+              disabled={isSubmitting || isLoading}
+            >
+              {isLoading || isSubmitting ? (
+                <div className="loader spinner-border animate-spin border-white border-4 rounded-full w-4 h-4 mr-2"></div>
+              ) : null}
+              {isLoading || isSubmitting ? "Registering..." : "Register"}
+            </button>
+            
           </div>
         </form>
-        <p className="inline-block align-baseline font-medium mt-4 text-sm">
-          Already have an account? Please
+        <p className="block text-center font-medium mt-4 text-sm">
+          Already have an account? 
           <Link to="/login" className="text-blue-500 hover:text-blue-800">
             {" "}
             Login

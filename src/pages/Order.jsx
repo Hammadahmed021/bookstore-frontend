@@ -21,9 +21,9 @@ const Order = () => {
     return <div>Loading...</div>;
   }
 
-  if (error) {
-    return <div>Error: {error.message}</div>;
-  }
+  // if (error) {
+  //   return <div>Error: {error.message}</div>;
+  // }
 
 
   return (
@@ -32,7 +32,7 @@ const Order = () => {
         {checkUser?.name} Orders
       </h1>
       <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {data?.orders?.map((order) => (
+        {data?.orders?.length > 0 ? data?.orders?.map((order) => (
           <li
             key={order?._id}
             className="bg-white border rounded-lg p-6 hover:shadow-lg transition-shadow"
@@ -58,7 +58,10 @@ const Order = () => {
               View Order
             </Link>
           </li>
-        ))}
+        ))
+      :
+      <p>You don't have any orders yet</p>
+      }
       </ul>
     </div>
   );

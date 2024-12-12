@@ -124,7 +124,7 @@ const Navbar = () => {
               </button>
               {isDropdown && (
                 <>
-                  <div className="absolute w-full right-0 mt-2 top-8 p-1 border rounded-lg shadow-lg bg-white z-10">
+                  <div className="absolute w-full sm:w-32 right-0 mt-2 top-8 p-1 border rounded-lg shadow-lg bg-white z-10">
                     <ul className="text-xs sm:text-sm">
                       {DropDownNavigation.map((item) => (
                         <li key={item.name}>
