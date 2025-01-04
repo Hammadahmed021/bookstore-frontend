@@ -13,6 +13,8 @@ import { clearAuth, setAuth } from "../store/features/users/userSlice";
 import { useGetWishlistQuery } from "../store/features/wishlist/wishlistApi";
 
 import logo from '../assets/logo.svg'
+import SearchBar from "./SearchBar";
+import { useFetchAllBooksQuery } from "../store/features/books/booksApi";
 
 const DropDownNavigation = [
   {
@@ -37,6 +39,8 @@ const Navbar = () => {
   const [logoutUser] = useLogoutUserMutation();
   const { data, error, isLoading } = useVerifyUserQuery();
   const { data: wishlist } = useGetWishlistQuery();
+    const { data: books = [] } = useFetchAllBooksQuery();
+  
 
   // const wishlistCount = wishlist?.favorites?.reduce((a, obj) => a + Object.keys(obj).length, 0)
   const wishlistCount = wishlist?.favorites?.length
@@ -95,13 +99,14 @@ const Navbar = () => {
           </Link>
 
           {/* search bar  */}
-          <div className="relative sm:w-72 w-40 border rounded-md">
-            <CiSearch className="absolute inline-block left-3 inset-y-2" />
+          <div className="relative sm:w-72 w-40">
+            {/* <CiSearch className="absolute inline-block left-3 inset-y-2" />
             <input
               type="text"
               placeholder="search here..."
               className=" py-1 w-full focus:outline-none pl-6 md:pl-8 pr-4 rounded-md bg-gray-50"
-            />
+            /> */}
+            <SearchBar books={books}/>
           </div>
         </div>
         <div className="relative flex items-center gap-4">
@@ -165,7 +170,7 @@ const Navbar = () => {
 
           <Link
             to={"/cart"}
-            className="bg-primary p-1 rounded-md flex items-center py-2 sm:px-4 text-white"
+            className="bg-primary p-1 rounded-md flex items-center py-2 sm:px-4 font-semibold"
           >
             <HiShoppingCart color="#222" />
             {cartItems.length > 0 && <sup>{cartItems?.length}</sup>}
