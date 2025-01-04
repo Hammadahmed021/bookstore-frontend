@@ -8,7 +8,7 @@ const Home = () => {
     <TopSeller />
     <Recommended />
     <Categories />
-    <News />
+    {/* <News /> */}
     </>
   );
 };

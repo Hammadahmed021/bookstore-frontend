@@ -14,6 +14,7 @@ const Shop = () => {
 
     const { data: getProducts = [], isLoading, error } = useFetchAllBooksQuery();
     const { data: categories } = useFetchAllCategoriesQuery();
+    
 
     useEffect(() => {
         if (getProducts) {
@@ -73,6 +74,7 @@ const Shop = () => {
 
     if (isLoading) return <div>Loading...</div>;
     if (error) return <div>Error loading products</div>;
+    console.log(getProducts, 'categories');
 
     return (
         <div className="py-10">

@@ -49,7 +49,7 @@ const Login = () => {
     }
 
   };
-  const   handleGoogleSignIn = () => { };
+  const  handleGoogleSignIn = () => { };
 
   return (
     <div className="h-[calc(100vh-120px)] flex items-center justify-center">
@@ -126,7 +126,7 @@ const Login = () => {
             Register
           </Link>
         </p>
-        <div className="mt-4">
+        {/* <div className="mt-4">
           <button
             className="w-full flex flex-wrap gap-1 items-center justify-center bg-secondary hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline"
             onClick={handleGoogleSignIn}
@@ -134,7 +134,7 @@ const Login = () => {
             <FaGoogle className="mr-2" />
             Sign in with Google
           </button>
-        </div>
+        </div> */}
       </div>
     </div>
   );

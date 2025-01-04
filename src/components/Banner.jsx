@@ -1,12 +1,14 @@
 import React from "react";
 import banner from "../assets/banner.png";
 import Button from "./Button";
+import FancySlider from "./BannerSlider";
 
 const Banner = () => {
   return (
     <div className="flex flex-col md:flex-row-reverse py-8 sm:py-16 gap-10 items-center justify-between">
       <div className="md:w-1/2 w-full flex justify-center md:justify-end">
-        <img src={banner} alt="" />
+        {/* <img src={banner} alt="" /> */}
+        <FancySlider />
       </div>
       <div className="md:w-1/2 w-full">
         <h1 className="text-2xl md:text-5xl font-medium mb-7">

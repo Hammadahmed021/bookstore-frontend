@@ -12,6 +12,8 @@ import {
 import { clearAuth, setAuth } from "../store/features/users/userSlice";
 import { useGetWishlistQuery } from "../store/features/wishlist/wishlistApi";
 
+import logo from '../assets/logo.svg'
+
 const DropDownNavigation = [
   {
     name: "Dashboard",
@@ -86,30 +88,31 @@ const Navbar = () => {
     <header className="max-w-screen-2xl mx-auto px-4 py-6 font-primary">
       <nav className="flex justify-between items-center">
         {/* left side */}
-        <div className="flex items-center md:gap-16 gap-4">
+        <div className="flex items-center md:gap-20 gap-4">
           <Link to="/">
-            <HiMiniBars3BottomLeft className="size-6" color="#222" />
+            {/* <HiMiniBars3BottomLeft className="size-6" color="#222" /> */}
+            <img src={logo}/>
           </Link>
 
           {/* search bar  */}
-          <div className="relative sm:w-72 w-40 space-x-2">
+          <div className="relative sm:w-72 w-40 border rounded-md">
             <CiSearch className="absolute inline-block left-3 inset-y-2" />
             <input
               type="text"
               placeholder="search here..."
-              className="bg-[#f0f0f0] py-1 w-full focus:outline-none px-6 md:px-8 rounded-md"
+              className=" py-1 w-full focus:outline-none pl-6 md:pl-8 pr-4 rounded-md bg-gray-50"
             />
           </div>
         </div>
         <div className="relative flex items-center gap-4">
-          <ul className="flex items-center gap-4 pr-4 border-black border-r-2">
+          <ul className="flex items-center gap-4 pr-4 border-black border-r-2 text-lg">
             <li>
               <Link className="hover:underline duration-200 transition-all" to={"/shop"}>Shop</Link>
             </li>
-            <li>
+            {/* <li>
               <Link className="hover:underline duration-200 transition-all" to={"/contact"}>
               Contact us</Link>
-            </li>
+            </li> */}
             
           </ul>
           {currentUser || checkUser ? (
@@ -162,7 +165,7 @@ const Navbar = () => {
 
           <Link
             to={"/cart"}
-            className="bg-primary p-1 rounded-md flex items-center py-2 sm:px-4"
+            className="bg-primary p-1 rounded-md flex items-center py-2 sm:px-4 text-white"
           >
             <HiShoppingCart color="#222" />
             {cartItems.length > 0 && <sup>{cartItems?.length}</sup>}

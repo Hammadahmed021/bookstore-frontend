@@ -133,7 +133,7 @@ const Register = () => {
             Login
           </Link>
         </p>
-        <div className="mt-4">
+        {/* <div className="mt-4">
           <button
             className="w-full flex flex-wrap gap-1 items-center justify-center bg-secondary hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             onClick={handleGoogleSignIn}
@@ -141,7 +141,7 @@ const Register = () => {
             <FaGoogle className="mr-2" />
             Sign in with Google
           </button>
-        </div>
+        </div> */}
       </div>
     </div>
   );
