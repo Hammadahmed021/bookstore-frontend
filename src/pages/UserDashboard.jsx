@@ -8,6 +8,8 @@ const UserDashboard = () => {
   const { data: user, error, isLoading } = useVerifyUserQuery();
   const [setNewPassword] = useSetNewPasswordMutation();
   const checkUser = useSelector((state) => state.auth.user);
+  console.log(checkUser, 'checkUser >>');
+
 
   const [newPassword, setNewPasswordState] = useState('');
   const [confirmPassword, setConfirmPasswordState] = useState('');
@@ -41,9 +43,11 @@ const UserDashboard = () => {
   if (error) return <p>Error loading user data: {error.message}</p>;
 
   return (
-    <div className="container mx-auto p-6 bg-white shadow-md rounded-md max-w-2xl">
-      <h1 className="text-2xl font-bold mb-6 text-center text-blue-600">User Dashboard</h1>
-      <div className="mb-6 p-4 bg-blue-50 rounded">
+    <div className="container mx-auto p-4">
+      <h1 className="text-2xl font-bold text-gray-800 mb-6">
+        User Dashboard
+      </h1>
+      <div className="mb-6 space-y-2">
         <p>
           <strong>Name:</strong> {user?.user?.name || 'N/A'}
         </p>
@@ -52,40 +56,42 @@ const UserDashboard = () => {
         </p>
       </div>
 
-      <form onSubmit={handlePasswordChange} className="space-y-6">
-        <div>
-          <label htmlFor="password" className="block text-gray-700 font-medium mb-1">
-            New Password
-          </label>
-          <input
-            type="password"
-            id="password"
-            value={newPassword}
-            onChange={(e) => setNewPasswordState(e.target.value)}
-            className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-          />
-        </div>
+      {checkUser !== checkUser?.loginType === "google" &&
+        <form onSubmit={handlePasswordChange} className="space-y-6">
+          <div>
+            <label htmlFor="password" className="block text-gray-700 font-medium mb-1">
+              New Password
+            </label>
+            <input
+              type="password"
+              id="password"
+              value={newPassword}
+              onChange={(e) => setNewPasswordState(e.target.value)}
+              className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+            />
+          </div>
 
-        <div>
-          <label htmlFor="confirmPassword" className="block text-gray-700 font-medium mb-1">
-            Confirm Password
-          </label>
-          <input
-            type="password"
-            id="confirmPassword"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPasswordState(e.target.value)}
-            className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-          />
-        </div>
+          <div>
+            <label htmlFor="confirmPassword" className="block text-gray-700 font-medium mb-1">
+              Confirm Password
+            </label>
+            <input
+              type="password"
+              id="confirmPassword"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPasswordState(e.target.value)}
+              className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+            />
+          </div>
 
-        <button
-          type="submit"
-          className="w-full bg-blue-500 text-white py-3 rounded-md text-lg hover:bg-blue-600 transition-all"
-        >
-          Update Password
-        </button>
-      </form>
+          <button
+            type="submit"
+            className="w-full bg-blue-500 text-white py-3 rounded-md text-lg hover:bg-blue-600 transition-all"
+          >
+            Update Password
+          </button>
+        </form>
+      }
     </div>
   );
 };

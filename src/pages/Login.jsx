@@ -4,15 +4,17 @@ import { FaGoogle } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { Input } from "../components";
 import { useDispatch } from "react-redux";
-import { useLoginUserMutation } from "../store/features/users/usersApi";
+import { useGoogleAuthMutation, useLoginUserMutation } from "../store/features/users/usersApi";
 import Button from "../components/Button";
 import { setAuth } from "../store/features/users/userSlice";
 import { showErrorToast, showSuccessToast } from "../utils/toast";
+import { SignUpWithGoogle } from "../firebase";
 
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [isLoadingLogin, setIsLoadingLogin] = useState(false)
+  const [isLoadingGoogle, setIsLoadingGoogle] = useState(false)
   const {
     register,
     handleSubmit,
@@ -21,6 +23,7 @@ const Login = () => {
   } = useForm();
 
   const [loginUser, { isLoading, error }] = useLoginUserMutation();
+  const [googleAuth] = useGoogleAuthMutation();
 
   const onSubmit = async (data) => {
     try {
@@ -44,12 +47,38 @@ const Login = () => {
     } catch (error) {
       showErrorToast("something went wrong")
       console.error("Login failed", error); // Handle login error properly
-    } finally{
+    } finally {
       setIsLoadingLogin(false)
     }
 
   };
-  const  handleGoogleSignIn = () => { };
+
+  const handleGoogleSignIn = async () => {
+    try {
+      setIsLoadingGoogle(true); // Start loading state
+      // Get the ID token from Firebase
+      const idToken = await SignUpWithGoogle();
+
+      // Use React Query to call the backend with the ID token
+      const userData = await googleAuth(idToken).unwrap(); // Unwrap to get the response or error
+
+      console.log("User logged in successfully:", userData); // Check the structure of the response
+
+      if (userData) {
+
+        // Dispatch the role along with the user data and token
+        dispatch(setAuth({ user: {...userData, loginType: 'google' }, token: userData.token }));
+
+        showSuccessToast("User login successfully");
+      }
+    } catch (error) {
+      showErrorToast("Something went wrong during Google sign-in");
+      console.error("Google sign-in failed", error); // Handle login error properly
+    } finally {
+      setIsLoadingGoogle(false); // Reset loading state
+    }
+  };
+
 
   return (
     <div className="h-[calc(100vh-120px)] flex items-center justify-center">
@@ -107,7 +136,7 @@ const Login = () => {
           {/* <p className="text-red-500 text-xs italic mb-3">Message</p> */}
 
           <div className="flex flex-wrap space-y-2.5 items-center justify-between">
-            <button 
+            <button
               className="bg-primary border rounded-lg w-full text-white px-6 py-2  hover:bg-opacity-80 flex items-center justify-center"
 
               disabled={isSubmitting || isLoadingLogin}
@@ -126,15 +155,21 @@ const Login = () => {
             Register
           </Link>
         </p>
-        {/* <div className="mt-4">
+        <div className="mt-4">
           <button
             className="w-full flex flex-wrap gap-1 items-center justify-center bg-secondary hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline"
             onClick={handleGoogleSignIn}
+            disabled={isLoadingGoogle}
           >
-            <FaGoogle className="mr-2" />
-            Sign in with Google
+            {isLoadingGoogle ? (
+              <div className="loader spinner-border animate-spin border-white border-4 rounded-full w-4 h-4 mr-2"></div>
+            ) : (
+              <FaGoogle className="mr-2" />
+            )}
+            {isLoadingGoogle ? "Signing in..." : "Sign in with Google"}
           </button>
-        </div> */}
+
+        </div>
       </div>
     </div>
   );

@@ -25,7 +25,7 @@ const CategorySingle = () => {
 
   return (
     <div>
-      <h2 className="text-2xl  mb-6">
+      <h2 className="text-2xl mb-6">
         <span className="font-semibold">Category:</span>{" "}
         <span className="text-medium text-lg">
           {getProducts?.data?.category?.title}

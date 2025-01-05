@@ -43,7 +43,7 @@ const Order = () => {
               </h3>
               <span className="text-sm text-gray-500">
                 Total:{" "}
-                <span className="font-bold text-blue-600">
+                <span className="font-bold text-gray-500">
                   ${order?.totalPrice?.toFixed(2)}
                 </span>
               </span>
@@ -53,7 +53,7 @@ const Order = () => {
             </p>
             <Link
               to={`/order/${order?._id}`}
-              className="block text-center mt-4 bg-blue-500 text-white font-medium py-2 px-4 rounded-md hover:bg-blue-600 transition-colors"
+              className="block text-center mt-4 bg-primary text-white font-medium py-2 px-4 rounded-md hover:bg-opacity-90 transition-colors"
             >
               View Order
             </Link>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams, Link, useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useFetchBookByIdQuery } from "../store/features/books/booksApi";
 import { getImgUrl } from "../utils/getImage";
 import Button from "../components/Button";
@@ -8,12 +8,21 @@ import {
   addToCart,
   updateCartItemQuantity,
 } from "../store/features/cart/cartSlice";
-import { useFetchAllCategoriesQuery } from "../store/features/categories/categoryApi";
+import { useFetchAllCategoriesQuery, useFetchCategoryByIdQuery } from "../store/features/categories/categoryApi";
+import BookCard from "../components/BookCard";
+import SwiperComponent from "../components/SwiperComponent";
 
 const BookSingle = () => {
   const { id } = useParams();
+
   const { data: book, isLoading, error } = useFetchBookByIdQuery(id);
   const { data: allCategories } = useFetchAllCategoriesQuery();
+
+  // Fetch related products from category
+  const { data: getRelatedProducts, isLoading: isLoadingRelated, error: errorRelated } = useFetchCategoryByIdQuery(book?.category);
+  console.log(getRelatedProducts, 'getRelatedProducts');
+  
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -26,8 +35,7 @@ const BookSingle = () => {
   if (error) return <p>Failed to load book details. Please try again later.</p>;
   if (!book) return <p>Book not found.</p>;
 
-  const { _id, title, coverImage, description, oldPrice, newPrice, category } =
-    book;
+  const { _id, title, coverImage, description, oldPrice, newPrice, category } = book;
 
   const totalPrice = newPrice * quantity;
 
@@ -67,8 +75,12 @@ const BookSingle = () => {
     navigate("/cart"); // Adjust path if needed
   };
 
+  // Loading and error handling
+  if (isLoadingRelated) return <div>Loading...</div>;
+  if (errorRelated) return <div>Error loading related products</div>;
+
   return (
-    <div className="max-w-screen-2xl mx-auto">
+    <div className="max-w-screen-2xl mx-auto py-16">
       <div className="flex flex-col md:flex-row gap-10">
         {/* Product Image */}
         <div className="md:w-1/2">
@@ -143,13 +155,32 @@ const BookSingle = () => {
             )}
           </div>
 
-          {/* Total  */}
+          {/* Total */}
           <p className="text-lg font-medium mt-4 flex gap-4">
             Total:{" "}
             <span className="text-blue-600 font-semibold">
               ${totalPrice.toFixed(2)}
             </span>
           </p>
+        </div>
+      </div>
+
+      {/* Related Products */}
+      <div className="pt-24">
+        <h2 className="text-2xl mb-6">
+          <span className="font-semibold">Related Products:</span>{" "}
+          <span className="text-medium text-lg">
+            {getRelatedProducts?.data?.category?.title}
+          </span>{" "}
+          <span className="text-medium text-lg">
+            ({getRelatedProducts?.data?.products?.length})
+          </span>
+        </h2>
+        <div className="">
+          <SwiperComponent
+            data={getRelatedProducts?.data?.products}
+            renderSlide={(book) => <BookCard props={book} />}
+          />
         </div>
       </div>
     </div>

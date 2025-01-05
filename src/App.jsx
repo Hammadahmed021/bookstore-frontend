@@ -28,7 +28,7 @@ export default function App() {
   }, [data, error, isLoading, dispatch]);
 
   if (isLoading) {
-    return <div>Loading...</div>; // Show a loading indicator while verifying
+    return <div className="min-h-screen flex items-center justify-center">Loading...</div>; // Show a loading indicator while verifying
   }
 
   return (

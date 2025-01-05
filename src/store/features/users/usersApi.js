@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import {  getBaseURL } from "../../../utils/getBaseUrl";
+import { getBaseURL } from "../../../utils/getBaseUrl";
 import Cookies from "js-cookie";
 import {
   getFirebaseTokenForLogin,
@@ -220,6 +220,32 @@ const authApi = createApi({
         }
       },
     }),
+
+    // Google Login/Signup Mutation
+    googleAuth: builder.mutation({
+      async queryFn(idToken, _queryApi, _extraOptions, baseQueryFn) {
+
+        try {
+          // Save token in cookies
+          Cookies.set("token", idToken, { expires: 7 });
+
+          // Call the backend API with the idToken
+          const result = await baseQueryFn({
+            url: "/auth/google",
+            method: "POST",
+            body: {idToken},
+          });
+
+          if (result.error) throw result.error;
+
+
+          return { data: result.data};
+        } catch (error) {
+          return { error: { status: "CUSTOM_ERROR", error: error.message } };
+        }
+      },
+    }),
+
   }),
 });
 
@@ -231,7 +257,8 @@ export const {
   useLogoutUserMutation,
   useFetchAllUsersQuery,
   useSetNewPasswordMutation,
-  useForgotPasswordMutation
+  useForgotPasswordMutation,
+  useGoogleAuthMutation
 } = authApi;
 
 export default authApi;
