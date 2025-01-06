@@ -20,7 +20,7 @@ const Banner = () => {
           to captivating memoirs, this week's new releases offer something for
           everyone
         </p>
-        <Button icon={false} text={"Subscribe"} onClick={() => {}} />
+        <Button icon={false} text={"Shop Now"} onClick={() => {}} />
       </div>
     </div>
   );
