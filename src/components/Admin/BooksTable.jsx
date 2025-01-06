@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo } from "react";
 import {
   useTable,
   useSortBy,
@@ -7,16 +7,17 @@ import {
 } from "react-table";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { useDeleteBookMutation } from "../../store/features/books/booksApi";
 
 const BooksTable = ({ data = [], loading, error }) => {
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error loading books</div>;
-  if (!data || data.length === 0) return <div>No books available</div>;
   const [search, setSearch] = useState("");
-  const navigate = useNavigate();
-
   const [deleteBookId, setDeleteBookId] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false);
+
+  // RTK Mutation Hook
+  const [deleteBook] = useDeleteBookMutation();
+
+  const navigate = useNavigate();
 
   const filteredData = useMemo(
     () =>
@@ -26,9 +27,6 @@ const BooksTable = ({ data = [], loading, error }) => {
       }),
     [data, search]
   );
-  console.log(data, "data");
-
-  // Fetch data from API
 
   const columns = useMemo(
     () => [
@@ -69,7 +67,6 @@ const BooksTable = ({ data = [], loading, error }) => {
     []
   );
 
-  // Set up table instance
   const {
     getTableProps,
     getTableBodyProps,
@@ -94,47 +91,35 @@ const BooksTable = ({ data = [], loading, error }) => {
     usePagination
   );
 
-  // Handle delete action with a confirmation modal
   const handleDelete = async () => {
-    if (!deleteBookId || isDeleting) return; // Prevent multiple delete calls
+    if (!deleteBookId || isDeleting) return;
 
-    setIsDeleting(true); // Start deletion process
+    setIsDeleting(true);
     try {
-      console.log("Deleting book with id:", deleteBookId);
-      // Simulate a delay (replace with your delete API call logic)
-      setTimeout(() => {
-        console.log("Book deleted successfully!");
-        setDeleteBookId(null); // Reset deleteBookId after deletion
-      }, 1000); // Simulated delay
+      await deleteBook(deleteBookId).unwrap();
+      console.log("Book deleted successfully!");
+      setDeleteBookId(null); // Reset after successful deletion
     } catch (error) {
       console.error("Error deleting book:", error);
     } finally {
-      setIsDeleting(false); // Stop the deleting state
+      setIsDeleting(false);
     }
   };
 
   const handleEdit = (value) => {
-    if (!value) {
-      console.error("Invalid value passed:", value);
-      return;
-    }
-
-    // Debugging logs
-    const bookData = data?.find((book) => {
-      return book?._id.trim() === value.trim();
-    });
+    const bookData = data?.find((book) => book?._id === value);
 
     if (!bookData) {
-      console.error("No matching book found for value:", value);
+      console.error("No matching book found");
       return;
     }
 
-    try {
-      navigate(`/admin/edit-book/${value}`, { state: { data: bookData } });
-    } catch (error) {
-      console.error("Error navigating to edit book:", error);
-    }
+    navigate(`/admin/edit-book/${value}`, { state: { data: bookData } });
   };
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error loading books</div>;
+  if (!data || data.length === 0) return <div>No books available</div>;
 
   return (
     <>
@@ -148,7 +133,7 @@ const BooksTable = ({ data = [], loading, error }) => {
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search by Restaurant Name or User Name"
+              placeholder="Search by Title"
               className="p-2 border rounded w-auto"
             />
           </div>
@@ -174,7 +159,7 @@ const BooksTable = ({ data = [], loading, error }) => {
                           ? column.isSortedDesc
                             ? " 🔽"
                             : " 🔼"
-                          : "🔽"}
+                          : ""}
                       </span>
                     </th>
                   ))}
@@ -185,13 +170,13 @@ const BooksTable = ({ data = [], loading, error }) => {
               {...getTableBodyProps()}
               className="bg-white divide-y divide-gray-200"
             >
-              {page.map((row, index) => {
+              {page.map((row) => {
                 prepareRow(row);
                 return (
                   <tr
                     key={row.id}
                     {...row.getRowProps()}
-                    className={"even:bg-slate-50"}
+                    className="even:bg-slate-50"
                   >
                     {row.cells.map((cell) => (
                       <td
@@ -226,10 +211,7 @@ const BooksTable = ({ data = [], loading, error }) => {
               {"<"}
             </button>
             <span>
-              Page{" "}
-              <strong>
-                {pageIndex + 1} of {pageOptions.length}
-              </strong>{" "}
+              Page {pageIndex + 1} of {pageOptions.length}
             </span>
             <button
               onClick={() => nextPage()}
@@ -251,7 +233,7 @@ const BooksTable = ({ data = [], loading, error }) => {
             onChange={(e) => setPageSize(Number(e.target.value))}
             className="border border-gray-300 rounded p-1"
           >
-            {[5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 99].map((size) => (
+            {[5, 10, 20, 30, 50].map((size) => (
               <option key={size} value={size}>
                 Show {size}
               </option>
@@ -261,23 +243,23 @@ const BooksTable = ({ data = [], loading, error }) => {
       </div>
 
       {/* Delete Confirmation Modal */}
-      {deleteBookId && !isDeleting && (
+      {deleteBookId && (
         <div className="fixed inset-0 flex justify-center items-center bg-gray-500 bg-opacity-50">
           <div className="bg-white p-6 rounded-lg shadow-lg w-96">
             <h2 className="text-xl font-bold mb-4">Confirm Delete</h2>
             <p className="mb-4">Are you sure you want to delete this book?</p>
             <div className="flex justify-between">
               <button
-                onClick={() => setDeleteBookId(null)} // Close the modal
+                onClick={() => setDeleteBookId(null)}
                 className="px-4 py-2 bg-gray-300 text-black rounded-md"
               >
                 Cancel
               </button>
               <button
-                onClick={handleDelete} // Confirm and delete
+                onClick={handleDelete}
                 className="px-4 py-2 bg-red-500 text-white rounded-md"
               >
-                Confirm
+                {isDeleting ? "Deleting..." : "Confirm"}
               </button>
             </div>
           </div>

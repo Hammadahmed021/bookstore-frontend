@@ -45,7 +45,7 @@ const AdminMain = () => {
         <span>
           {currentUser && (
             <div className="flex gap-6 items-center">
-              <p className="lowercase">Welcome {currentUser?.name}</p>
+              <p className="capitalize">Welcome <span className="font-semibold">{currentUser?.name}</span></p>
               <button
                 onClick={handleLogout}
                 disabled={loadingLogout} // Disable button while loading
