@@ -135,7 +135,7 @@ const Shop = () => {
                                 onChange={(e) =>
                                     setPriceRange([+e.target.value, priceRange[1]])
                                 }
-                                className="w-full"
+                                className="w-full bg-gray-300"
                             />
                         </div>
                     </div>

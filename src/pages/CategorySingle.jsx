@@ -24,7 +24,7 @@ const CategorySingle = () => {
   if (error) return <div>Error loading products</div>;
 
   return (
-    <div>
+    <div className="py-16">
       <h2 className="text-2xl mb-6">
         <span className="font-semibold">Category:</span>{" "}
         <span className="text-medium text-lg">

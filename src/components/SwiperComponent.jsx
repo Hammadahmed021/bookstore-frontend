@@ -9,7 +9,7 @@ import "swiper/css/navigation";
 const SwiperComponent = ({ data = [], renderSlide }) => {
   return (
     <Swiper
-      slidesPerView={3}
+      slidesPerView={1}
       spaceBetween={30}
       navigation={true}
       breakpoints={{
