@@ -1,16 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Input } from "../components";
 import { Link } from "react-router-dom";
 import { FaGoogle } from "react-icons/fa";
 import Button from "../components/Button";
-import { useRegisterUserMutation } from "../store/features/users/usersApi";
+import { useGoogleAuthMutation, useRegisterUserMutation } from "../store/features/users/usersApi";
 import { useDispatch } from "react-redux";
 import { setAuth } from "../store/features/users/userSlice";
 import { showErrorToast, showSuccessToast } from "../utils/toast";
+import { SignUpWithGoogle } from "../firebase";
 
 const Register = () => {
   const dispatch = useDispatch();
+  const [isLoadingGoogle, setIsLoadingGoogle] = useState(false)
+
 
   const {
     register,
@@ -21,13 +24,15 @@ const Register = () => {
 
   const [registerUser, { isLoading, isError, error: apiError }] =
     useRegisterUserMutation();
+  const [googleAuth] = useGoogleAuthMutation();
 
-  const onSubmit = async (data) => { 
-    
+
+  const onSubmit = async (data) => {
+
     try {
       const response = await registerUser(data).unwrap(); // The unwrap will allow you to catch the response or error
-     console.log(response, 'response >><<<<<<<');
-     
+      console.log(response, 'response >><<<<<<<');
+
       const isAdmin = response.name === "admin"; // Strictly check for admin
       const userRole = isAdmin ? "admin" : "user"; // Assign the correct role
       if (response) {
@@ -40,7 +45,32 @@ const Register = () => {
       console.error("Registration failed", error);
     }
   };
-  const handleGoogleSignIn = () => {};
+
+  const handleGoogleSignIn = async () => {
+    try {
+      setIsLoadingGoogle(true); // Start loading state
+      // Get the ID token from Firebase
+      const idToken = await SignUpWithGoogle();
+
+      // Use React Query to call the backend with the ID token
+      const userData = await googleAuth(idToken).unwrap(); // Unwrap to get the response or error
+
+      console.log("User logged in successfully:", userData); // Check the structure of the response
+
+      if (userData) {
+
+        // Dispatch the role along with the user data and token
+        dispatch(setAuth({ user: { ...userData, loginType: 'google' }, token: userData.token }));
+
+        showSuccessToast("User login successfully");
+      }
+    } catch (error) {
+      showErrorToast(error?.message);
+      console.error("Google sign-in failed", error); // Handle login error properly
+    } finally {
+      setIsLoadingGoogle(false); // Reset loading state
+    }
+  };
 
   return (
     <div className="h-[calc(100vh-120px)] flex items-center justify-center">
@@ -123,25 +153,30 @@ const Register = () => {
               ) : null}
               {isLoading || isSubmitting ? "Registering..." : "Register"}
             </button>
-            
+
           </div>
         </form>
         <p className="block text-center font-medium mt-4 text-sm">
-          Already have an account? 
+          Already have an account?
           <Link to="/login" className="text-blue-500 hover:text-blue-800">
             {" "}
             Login
           </Link>
         </p>
-        {/* <div className="mt-4">
+        <div className="mt-4">
           <button
-            className="w-full flex flex-wrap gap-1 items-center justify-center bg-secondary hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            className="w-full flex flex-wrap gap-1 items-center justify-center bg-secondary hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline"
             onClick={handleGoogleSignIn}
+            disabled={isLoadingGoogle}
           >
-            <FaGoogle className="mr-2" />
-            Sign in with Google
+            {isLoadingGoogle ? (
+              <div className="loader spinner-border animate-spin border-white border-4 rounded-full w-4 h-4 mr-2"></div>
+            ) : (
+              <FaGoogle className="mr-2" />
+            )}
+            {isLoadingGoogle ? "Signing up..." : "Sign up with Google"}
           </button>
-        </div> */}
+        </div>
       </div>
     </div>
   );
