@@ -17,10 +17,8 @@ const BookSingle = () => {
 
   const { data: book, isLoading, error } = useFetchBookByIdQuery(id);
   const { data: allCategories } = useFetchAllCategoriesQuery();
-
-  // Fetch related products from category
-  const { data: getRelatedProducts, isLoading: isLoadingRelated, error: errorRelated } = useFetchCategoryByIdQuery(book?.category);
-  console.log(getRelatedProducts, 'getRelatedProducts');
+  console.log(book, 'book'); 
+  
   
 
   const dispatch = useDispatch();
@@ -35,12 +33,12 @@ const BookSingle = () => {
   if (error) return <p>Failed to load book details. Please try again later.</p>;
   if (!book) return <p>Book not found.</p>;
 
-  const { _id, title, coverImage, description, oldPrice, newPrice, category } = book;
+  const { _id, title, coverImage, description, oldPrice, newPrice, category } = book?.book;
 
   const totalPrice = newPrice * quantity;
 
   const getCategory = allCategories?.data?.filter(
-    (item) => item?._id == book?.category
+    (item) => item?._id == book?.book?.category
   );
   const getCategoryName = getCategory?.map((item) => {
     return item?.title;
@@ -65,7 +63,7 @@ const BookSingle = () => {
       newPrice,
       coverImage,
       quantity,
-      getCategoryName,
+      category,
     };
     dispatch(addToCart(product));
   };
@@ -75,9 +73,6 @@ const BookSingle = () => {
     navigate("/cart"); // Adjust path if needed
   };
 
-  // Loading and error handling
-  if (isLoadingRelated) return <div>Loading...</div>;
-  if (errorRelated) return <div>Error loading related products</div>;
 
   return (
     <div className="max-w-screen-2xl mx-auto py-16">
@@ -170,15 +165,12 @@ const BookSingle = () => {
         <h2 className="text-2xl mb-6">
           <span className="font-semibold">Related Products:</span>{" "}
           <span className="text-medium text-lg">
-            {getRelatedProducts?.data?.category?.title}
-          </span>{" "}
-          <span className="text-medium text-lg">
-            ({getRelatedProducts?.data?.products?.length})
+            ({book?.relatedBooks?.length})
           </span>
         </h2>
         <div className="">
           <SwiperComponent
-            data={getRelatedProducts?.data?.products}
+            data={book?.relatedBooks}
             renderSlide={(book) => <BookCard props={book} />}
           />
         </div>
