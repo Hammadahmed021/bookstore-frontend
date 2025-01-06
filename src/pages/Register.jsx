@@ -62,7 +62,7 @@ const Register = () => {
         // Dispatch the role along with the user data and token
         dispatch(setAuth({ user: { ...userData, loginType: 'google' }, token: userData.token }));
 
-        showSuccessToast("User login successfully");
+        showSuccessToast("User registered successfully");
       }
     } catch (error) {
       showErrorToast(error?.message);
